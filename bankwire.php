@@ -40,7 +40,7 @@ class BankWire extends PaymentModule
 	{
 		$this->name = 'bankwire';
 		$this->tab = 'payments_gateways';
-		$this->version = '0.6';
+		$this->version = '0.7';
 		$this->author = 'PrestaShop';
 		$this->controllers = array('payment', 'validation');
 		
@@ -61,6 +61,7 @@ class BankWire extends PaymentModule
 		$this->displayName = $this->l('Bank wire');
 		$this->description = $this->l('Accept payments for your products via bank wire transfer.');
 		$this->confirmUninstall = $this->l('Are you sure about removing these details?');
+		$this->ps_versions_compliancy = array('min' => '1.5.6.1', 'max' => _PS_VERSION_);
 		if (!isset($this->owner) || !isset($this->details) || !isset($this->address))
 			$this->warning = $this->l('Account owner and account details must be configured before using this module.');
 		if (!count(Currency::checkPaymentCurrencies($this->id)))
