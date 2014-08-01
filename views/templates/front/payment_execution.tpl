@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}{l s='Bank-wire payment.' mod='bankwire'}{/capture}
+{capture name=path}{l s='Bank-wire payment' mod='bankwire'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Order summary' mod='bankwire'}</h2>
@@ -69,7 +69,7 @@
 <p>
 	{l s='Bank wire account information will be displayed on the next page.' mod='bankwire'}
 	<br /><br />
-	<b>{l s='Please confirm your order by clicking "I confirm my order."' mod='bankwire'}.</b>
+	<b>{l s='Please confirm your order by clicking "I confirm my order".' mod='bankwire'}</b>
 </p>
 <p class="cart_navigation" id="cart_navigation">
 	<input type="submit" value="{l s='I confirm my order' mod='bankwire'}" class="exclusive_large" />
