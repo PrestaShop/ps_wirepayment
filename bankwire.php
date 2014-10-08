@@ -215,6 +215,7 @@ class BankWire extends PaymentModule
 						'type' => 'textarea',
 						'label' => $this->l('Bank address'),
 						'name' => 'BANK_WIRE_ADDRESS',
+						'required' => true
 					),
 				),
 				'submit' => array(
