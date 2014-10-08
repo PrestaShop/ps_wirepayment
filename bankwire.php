@@ -202,12 +202,14 @@ class BankWire extends PaymentModule
 						'type' => 'text',
 						'label' => $this->l('Account owner'),
 						'name' => 'BANK_WIRE_OWNER',
+						'required' => true
 					),
 					array(
 						'type' => 'textarea',
 						'label' => $this->l('Details'),
 						'name' => 'BANK_WIRE_DETAILS',
-						'desc' => $this->l('Such as bank branch, IBAN number, BIC, etc.')
+						'desc' => $this->l('Such as bank branch, IBAN number, BIC, etc.'),
+						'required' => true
 					),
 					array(
 						'type' => 'textarea',
