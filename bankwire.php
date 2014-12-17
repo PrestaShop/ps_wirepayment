@@ -43,6 +43,7 @@ class BankWire extends PaymentModule
 		$this->version = '1.0.4';
 		$this->author = 'PrestaShop';
 		$this->controllers = array('payment', 'validation');
+		$this->is_eu_compatible = 1;
 
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
@@ -75,7 +76,7 @@ class BankWire extends PaymentModule
 
 	public function install()
 	{
-		if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentReturn'))
+		if (!parent::install() || !$this->registerHook('payment') || ! $this->registerHook('displayPaymentEU') || !$this->registerHook('paymentReturn'))
 			return false;
 		return true;
 	}
@@ -150,6 +151,22 @@ class BankWire extends PaymentModule
 			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
 		));
 		return $this->display(__FILE__, 'payment.tpl');
+	}
+
+	public function hookDisplayPaymentEU($params)
+	{
+		if (!$this->active)
+			return;
+
+		if (!$this->checkCurrency($params['cart']))
+			return;
+
+
+		return array(
+			'cta_text' => $this->l('Pay by Bank Wire'),
+			'logo' => Media::getMediaPath(dirname(__FILE__).'/bankwire.png'),
+			'action' => $this->context->link->getModuleLink($this->name, 'validation', array(), true)
+		);
 	}
 
 	public function hookPaymentReturn($params)
