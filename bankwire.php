@@ -166,13 +166,13 @@ class BankWire extends PaymentModule
 		{
 			$payment_options = new PaymentOption();
 			$payment_options->cta_text = $this->l('Pay by Bank Wire');
-			$payment_options->logo = Media::getMediaPath(dirname(__FILE__).'/bankwire.png');
+			$payment_options->logo = Media::getMediaPath(dirname(__FILE__).'/bankwire.jpg');
 			$payment_options->action = $this->context->link->getModuleLink($this->name, 'validation', array(), true);
 		}
 		else
 			$payment_options = array(
 				'cta_text' => $this->l('Pay by Bank Wire'),
-				'logo' => Media::getMediaPath(dirname(__FILE__).'/bankwire.png'),
+				'logo' => Media::getMediaPath(dirname(__FILE__).'/bankwire.jpg'),
 				'action' => $this->context->link->getModuleLink($this->name, 'validation', array(), true)
 			);
 
