@@ -29,8 +29,8 @@ if (!defined('_PS_VERSION_'))
 
 class BankWire extends PaymentModule
 {
-	private $_html = '';
-	private $_postErrors = array();
+	protected $_html = '';
+	protected $_postErrors = array();
 
 	public $details;
 	public $owner;
@@ -92,7 +92,7 @@ class BankWire extends PaymentModule
 		return true;
 	}
 
-	private function _postValidation()
+	protected function _postValidation()
 	{
 		if (Tools::isSubmit('btnSubmit'))
 		{
@@ -103,7 +103,7 @@ class BankWire extends PaymentModule
 		}
 	}
 
-	private function _postProcess()
+	protected function _postProcess()
 	{
 		if (Tools::isSubmit('btnSubmit'))
 		{
@@ -114,7 +114,7 @@ class BankWire extends PaymentModule
 		$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 	}
 
-	private function _displayBankWire()
+	protected function _displayBankWire()
 	{
 		return $this->display(__FILE__, 'infos.tpl');
 	}
