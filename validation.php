@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
+*  @copyright  2007-2015 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -30,11 +30,11 @@
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../header.php');
-include(dirname(__FILE__).'/bankwire.php');
+include(dirname(__FILE__).'/../../init.php');
 
 $context = Context::getContext();
 $cart = $context->cart;
-$bankwire = new BankWire();
+$bankwire = Module::getInstanceByName('bankwire');
 
 if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$bankwire->active)
 	Tools::redirect('index.php?controller=order&step=1');
