@@ -27,7 +27,11 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-function upgrade_module_1_0_6($module)
+function upgrade_module_1_0_8($module)
 {
+	$hook_to_remove_id = Hook::getIdByName('advancedPaymentApi');
+	if ($hook_to_remove_id) {
+		$module->unregisterHook((int)$hook_to_remove_id);
+	}
 	return true;
 }
