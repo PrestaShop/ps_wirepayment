@@ -40,7 +40,8 @@ class BankWire extends PaymentModule
 	{
 		$this->name = 'bankwire';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1.1';
+		$this->version = '2.0.0';
+		$this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 		$this->author = 'PrestaShop';
 		$this->controllers = array('payment', 'validation');
 		$this->is_eu_compatible = 1;
@@ -178,16 +179,31 @@ class BankWire extends PaymentModule
 		$state = $params['objOrder']->getCurrentState();
 		if (in_array($state, array(Configuration::get('PS_OS_BANKWIRE'), Configuration::get('PS_OS_OUTOFSTOCK'), Configuration::get('PS_OS_OUTOFSTOCK_UNPAID'))))
 		{
+			$bankwireOwner = $this->owner;
+			if (!$bankwireOwner) {
+				$bankwireOwner = '___________';
+			}
+
+			$bankwireDetails = Tools::nl2br($this->details);
+			if (!$bankwireDetails) {
+				$bankwireDetails = '___________';
+			}
+
+			$bankwireAddress = Tools::nl2br($this->address);
+			if (!$bankwireAddress) {
+				$bankwireAddress = '___________';
+			}
+
 			$this->smarty->assign(array(
-				'total_to_pay' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
-				'bankwireDetails' => Tools::nl2br($this->details),
-				'bankwireAddress' => Tools::nl2br($this->address),
-				'bankwireOwner' => $this->owner,
+				'shop_name' => $this->context->shop->name,
+				'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
+				'bankwireDetails' => $bankwireDetails,
+				'bankwireAddress' => $bankwireAddress,
+				'bankwireOwner' => $bankwireOwner,
 				'status' => 'ok',
-				'id_order' => $params['objOrder']->id
+				'reference' => $params['objOrder']->reference,
+				'contact_url' => $this->context->link->getPageLink('contact', true)
 			));
-			if (isset($params['objOrder']->reference) && !empty($params['objOrder']->reference))
-				$this->smarty->assign('reference', $params['objOrder']->reference);
 		}
 		else
 			$this->smarty->assign('status', 'failed');
