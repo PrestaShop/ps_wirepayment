@@ -84,7 +84,7 @@ class BankWire extends PaymentModule
 
     public function install()
     {
-        if (!parent::install() || !$this->registerHook('payment') || ! $this->registerHook('displayPaymentEU') || !$this->registerHook('paymentReturn')) {
+        if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentOptions') || !$this->registerHook('paymentReturn')) {
             return false;
         }
         return true;
@@ -148,24 +148,7 @@ class BankWire extends PaymentModule
         return $this->_html;
     }
 
-    public function hookPayment($params)
-    {
-        if (!$this->active) {
-            return;
-        }
-        if (!$this->checkCurrency($params['cart'])) {
-            return;
-        }
-
-        $this->smarty->assign(array(
-            'this_path' => $this->_path,
-            'this_path_bw' => $this->_path,
-            'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
-        ));
-        return $this->display(__FILE__, 'payment.tpl');
-    }
-
-    public function hookDisplayPaymentEU($params)
+    public function hookPaymentOptions($params)
     {
         if (!$this->active) {
             return;
@@ -175,11 +158,16 @@ class BankWire extends PaymentModule
             return;
         }
 
-        $payment_options = array(
-            'cta_text' => $this->l('Pay by Bank Wire'),
-            'logo' => Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/bankwire.jpg'),
-            'action' => $this->context->link->getModuleLink($this->name, 'validation', array(), true)
-        );
+        $this->getTemplateVarInfos();
+
+        $newOption = new Core_Business_Payment_PaymentOption();
+        $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
+                      ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
+                      ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_execution.tpl'])))
+                      ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/bankwire.jpg'));
+        $payment_options = [
+            $newOption,
+        ];
 
         return $payment_options;
     }
@@ -301,5 +289,36 @@ class BankWire extends PaymentModule
             'BANK_WIRE_OWNER' => Tools::getValue('BANK_WIRE_OWNER', Configuration::get('BANK_WIRE_OWNER')),
             'BANK_WIRE_ADDRESS' => Tools::getValue('BANK_WIRE_ADDRESS', Configuration::get('BANK_WIRE_ADDRESS')),
         );
+    }
+
+    public function getTemplateVarInfos()
+    {
+        $cart = $this->context->cart;
+        $total = sprintf(
+            $this->l('%1$s (tax incl.)'),
+            Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
+        );
+
+         $bankwireOwner = $this->owner;
+        if (!$bankwireOwner) {
+            $bankwireOwner = '___________';
+        }
+
+        $bankwireDetails = Tools::nl2br($this->details);
+        if (!$bankwireDetails) {
+            $bankwireDetails = '___________';
+        }
+
+        $bankwireAddress = Tools::nl2br($this->address);
+        if (!$bankwireAddress) {
+            $bankwireAddress = '___________';
+        }
+
+        $this->context->smarty->assign([
+            'total' => $total,
+            'bankwireDetails' => $bankwireDetails,
+            'bankwireAddress' => $bankwireAddress,
+            'bankwireOwner' => $bankwireOwner,
+        ]);
     }
 }
