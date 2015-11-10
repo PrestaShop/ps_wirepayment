@@ -148,6 +148,11 @@ class BankWire extends PaymentModule
         return $this->_html;
     }
 
+    public function hookPayment($params)
+    {
+        //TODO : Remove this empty function and not register this hook anymore
+    }
+
     public function hookPaymentOptions($params)
     {
         if (!$this->active) {
