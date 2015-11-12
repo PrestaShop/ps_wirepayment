@@ -33,6 +33,7 @@ function upgrade_module_2_0_0($module)
     $result = true;
     $hook_to_remove_ids = [
         Hook::getIdByName('displayPaymentEU'),
+        Hook::getIdByName('payment'),
     ];
 
     foreach ($hook_to_remove_ids as $hook_to_remove_id) {
