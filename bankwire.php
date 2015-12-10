@@ -24,6 +24,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+use PrestaShop\PrestaShop\Core\Business\Payment\PaymentOption;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -160,7 +162,7 @@ class BankWire extends PaymentModule
 
         $this->getTemplateVarInfos();
 
-        $newOption = new Core_Business_Payment_PaymentOption();
+        $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
                       ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_execution.tpl'])))
