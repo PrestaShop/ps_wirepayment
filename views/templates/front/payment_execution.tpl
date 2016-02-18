@@ -24,16 +24,15 @@
 *}
 
 <section>
-  <p>{l s='Please send us a bank wire with:' mod='bankwire'}
-    <dl>
-      <dt>{l s='Amount' mod='bankwire'}</dt>
-      <dd>{$total}</dd>
-      <dt>{l s='Name of account owner' mod='bankwire'}</dt>
-      <dd>{$bankwireOwner}</dd>
-      <dt>{l s='Please include these details' mod='bankwire'}</dt>
-      <dd>{$bankwireDetails}</dd>
-      <dt>{l s='Bank name' mod='bankwire'}</dt>
-      <dd>{$bankwireAddress}</dd>
-    </dl>
-  </p>
+  <p>{l s='Please send us a bank wire with:' mod='bankwire'}</p>
+  <dl>
+    <dt>{l s='Amount' mod='bankwire'}</dt>
+    <dd>{$total}</dd>
+    <dt>{l s='Name of account owner' mod='bankwire'}</dt>
+    <dd>{$bankwireOwner}</dd>
+    <dt>{l s='Please include these details' mod='bankwire'}</dt>
+    <dd>{$bankwireDetails}</dd>
+    <dt>{l s='Bank name' mod='bankwire'}</dt>
+    <dd>{$bankwireAddress}</dd>
+  </dl>
 </section>
