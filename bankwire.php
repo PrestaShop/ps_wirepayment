@@ -165,8 +165,7 @@ class BankWire extends PaymentModule
         $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-                      ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_execution.tpl'])))
-                      ->setLogo(Media::getMediaPath(_PS_MODULE_DIR_.$this->name.'/bankwire.jpg'));
+                      ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_execution.tpl'])));
         $payment_options = [
             $newOption,
         ];
