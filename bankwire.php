@@ -160,12 +160,14 @@ class BankWire extends PaymentModule
             return;
         }
 
-        $this->getTemplateVarInfos();
+        $this->context->smarty->assign(
+            $this->getTemplateVarInfos()
+        );
 
         $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-                      ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_execution.tpl'])));
+                      ->setAdditionalInformation($this->context->smarty->fetch(implode(DIRECTORY_SEPARATOR, [__DIR__, 'views', 'templates', 'front', 'payment_infos.tpl'])));
         $payment_options = [
             $newOption,
         ];
@@ -315,11 +317,11 @@ class BankWire extends PaymentModule
             $bankwireAddress = '___________';
         }
 
-        $this->context->smarty->assign([
+        return [
             'total' => $total,
             'bankwireDetails' => $bankwireDetails,
             'bankwireAddress' => $bankwireAddress,
             'bankwireOwner' => $bankwireOwner,
-        ]);
+        ];
     }
 }
