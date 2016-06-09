@@ -80,7 +80,7 @@ class BankWire extends PaymentModule
         $this->extra_mail_vars = array(
                                         '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
                                         '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
-                                        '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS'))
+                                        '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS')),
                                         );
     }
 
@@ -167,7 +167,9 @@ class BankWire extends PaymentModule
         $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-                      ->setAdditionalInformation($this->context->smarty->fetch('module:bankwire/views/templates/front/payment_infos.tpl'));
+                      ->setAdditionalInformation(
+                          $this->context->smarty->fetch('module:bankwire/views/templates/front/payment_infos.tpl')
+                      );
         $payment_options = [
             $newOption,
         ];
@@ -181,8 +183,16 @@ class BankWire extends PaymentModule
             return;
         }
 
-        $state = $params['objOrder']->getCurrentState();
-        if (in_array($state, array(Configuration::get('PS_OS_BANKWIRE'), Configuration::get('PS_OS_OUTOFSTOCK'), Configuration::get('PS_OS_OUTOFSTOCK_UNPAID')))) {
+        $state = $params['order']->getCurrentState();
+        if (
+            in_array(
+                $state,
+                array(
+                    Configuration::get('PS_OS_BANKWIRE'),
+                    Configuration::get('PS_OS_OUTOFSTOCK'),
+                    Configuration::get('PS_OS_OUTOFSTOCK_UNPAID'),
+                )
+        )) {
             $bankwireOwner = $this->owner;
             if (!$bankwireOwner) {
                 $bankwireOwner = '___________';
@@ -200,17 +210,22 @@ class BankWire extends PaymentModule
 
             $this->smarty->assign(array(
                 'shop_name' => $this->context->shop->name,
-                'total' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
+                'total' => Tools::displayPrice(
+                    $params['order']->getOrdersTotalPaid(),
+                    new Currency($params['order']->id_currency),
+                    false
+                ),
                 'bankwireDetails' => $bankwireDetails,
                 'bankwireAddress' => $bankwireAddress,
                 'bankwireOwner' => $bankwireOwner,
                 'status' => 'ok',
-                'reference' => $params['objOrder']->reference,
+                'reference' => $params['order']->reference,
                 'contact_url' => $this->context->link->getPageLink('contact', true)
             ));
         } else {
             $this->smarty->assign('status', 'failed');
         }
+
         return $this->display(__FILE__, 'payment_return.tpl');
     }
 
@@ -269,12 +284,13 @@ class BankWire extends PaymentModule
         $helper->table = $this->table;
         $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
         $helper->default_form_language = $lang->id;
-        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? : 0;
         $this->fields_form = array();
         $helper->id = (int)Tools::getValue('id_carrier');
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'btnSubmit';
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false).'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false).'&configure='
+            .$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFieldsValues(),
