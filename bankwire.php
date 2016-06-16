@@ -53,7 +53,7 @@ class BankWire extends PaymentModule
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
 
-        $config = Configuration::getMultiple(array('BANK_WIRE_DETAILS', 'BANK_WIRE_OWNER', 'BANK_WIRE_ADDRESS'));
+        $config = Configuration::getMultiple(array('BANK_WIRE_DETAILS', 'BANK_WIRE_OWNER', 'BANK_WIRE_ADDRESS', 'BANK_WIRE_RESERVATION_DAYS'));
         if (!empty($config['BANK_WIRE_OWNER'])) {
             $this->owner = $config['BANK_WIRE_OWNER'];
         }
@@ -62,6 +62,9 @@ class BankWire extends PaymentModule
         }
         if (!empty($config['BANK_WIRE_ADDRESS'])) {
             $this->address = $config['BANK_WIRE_ADDRESS'];
+        }
+        if (!empty($config['BANK_WIRE_RESERVATION_DAYS'])) {
+            $this->reservation_days = $config['BANK_WIRE_RESERVATION_DAYS'];
         }
 
         $this->bootstrap = true;
@@ -94,9 +97,17 @@ class BankWire extends PaymentModule
 
     public function uninstall()
     {
+        $languages = Language::getLanguages(false);
+        foreach ($languages as $lang) {
+            if (!Configuration::deleteByName('BANK_WIRE_CUSTOM_TEXT', $lang['id_lang'])) {
+                return false;
+            }
+        }
+
         if (!Configuration::deleteByName('BANK_WIRE_DETAILS')
                 || !Configuration::deleteByName('BANK_WIRE_OWNER')
                 || !Configuration::deleteByName('BANK_WIRE_ADDRESS')
+                || !Configuration::deleteByName('BANK_WIRE_RESERVATION_DAYS')
                 || !parent::uninstall()) {
             return false;
         }
@@ -120,6 +131,16 @@ class BankWire extends PaymentModule
             Configuration::updateValue('BANK_WIRE_DETAILS', Tools::getValue('BANK_WIRE_DETAILS'));
             Configuration::updateValue('BANK_WIRE_OWNER', Tools::getValue('BANK_WIRE_OWNER'));
             Configuration::updateValue('BANK_WIRE_ADDRESS', Tools::getValue('BANK_WIRE_ADDRESS'));
+
+            $custom_text = array();
+            $languages = Language::getLanguages(false);
+            foreach ($languages as $lang) {
+                if (Tools::getIsset('BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang'])) {
+                    $custom_text[$lang['id_lang']] = Tools::getValue('BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang']);
+                }
+            }
+            Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
+            Configuration::updateValue('BANK_WIRE_CUSTOM_TEXT', $custom_text);
         }
         $this->_html .= $this->displayConfirmation($this->l('Settings updated'));
     }
@@ -167,9 +188,7 @@ class BankWire extends PaymentModule
         $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-                      ->setAdditionalInformation(
-                          $this->context->smarty->fetch('module:bankwire/views/templates/front/payment_infos.tpl')
-                      );
+                      ->setAdditionalInformation($this->context->smarty->fetch('module:bankwire/views/templates/hook/bankwire_intro.tpl'));
         $payment_options = [
             $newOption,
         ];
@@ -278,6 +297,32 @@ class BankWire extends PaymentModule
                 )
             ),
         );
+        $fields_form_customization = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('Customization'),
+                    'icon' => 'icon-cogs'
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'text',
+                        'label' => $this->l('Reservation delay'),
+                        'desc' => $this->l('Number of days the goods will be reserved'),
+                        'name' => 'BANK_WIRE_RESERVATION_DAYS',
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'label' => $this->l('Information to the customer'),
+                        'name' => 'BANK_WIRE_CUSTOM_TEXT',
+                        'desc' => $this->l('Information about the bankwire (processing time, starting of the shipping...)'),
+                        'lang' => true
+                    ),
+                ),
+                'submit' => array(
+                    'title' => $this->l('Save'),
+                )
+            ),
+        );
 
         $helper = new HelperForm();
         $helper->show_toolbar = false;
@@ -298,15 +343,26 @@ class BankWire extends PaymentModule
             'id_language' => $this->context->language->id
         );
 
-        return $helper->generateForm(array($fields_form));
+        return $helper->generateForm(array($fields_form, $fields_form_customization));
     }
 
     public function getConfigFieldsValues()
     {
+        $custom_text = array();
+        $languages = Language::getLanguages(false);
+        foreach ($languages as $lang) {
+            $custom_text[$lang['id_lang']] = Tools::getValue(
+                'BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang'],
+                Configuration::get('BANK_WIRE_CUSTOM_TEXT', $lang['id_lang'])
+            );
+        }
+
         return array(
             'BANK_WIRE_DETAILS' => Tools::getValue('BANK_WIRE_DETAILS', Configuration::get('BANK_WIRE_DETAILS')),
             'BANK_WIRE_OWNER' => Tools::getValue('BANK_WIRE_OWNER', Configuration::get('BANK_WIRE_OWNER')),
             'BANK_WIRE_ADDRESS' => Tools::getValue('BANK_WIRE_ADDRESS', Configuration::get('BANK_WIRE_ADDRESS')),
+            'BANK_WIRE_RESERVATION_DAYS' => Tools::getValue('BANK_WIRE_RESERVATION_DAYS', Configuration::get('BANK_WIRE_RESERVATION_DAYS')),
+            'BANK_WIRE_CUSTOM_TEXT' => $custom_text,
         );
     }
 
@@ -333,11 +389,23 @@ class BankWire extends PaymentModule
             $bankwireAddress = '___________';
         }
 
-        return [
+        $bankwireReservationDays = Configuration::get('BANK_WIRE_RESERVATION_DAYS');
+        if (false === $bankwireReservationDays) {
+            $bankwireReservationDays = 7;
+        }
+
+        $bankwireCustomText = Tools::nl2br(Configuration::get('BANK_WIRE_CUSTOM_TEXT', $this->context->language->id));
+        if (false === $bankwireCustomText) {
+            $bankwireCustomText = '';
+        }
+
+        return array(
             'total' => $total,
             'bankwireDetails' => $bankwireDetails,
             'bankwireAddress' => $bankwireAddress,
             'bankwireOwner' => $bankwireOwner,
-        ];
+            'bankwireReservationDays' => (int)$bankwireReservationDays,
+            'bankwireCustomText' => $bankwireCustomText,
+        );
     }
 }
