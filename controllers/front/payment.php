@@ -44,7 +44,7 @@ class BankwirePaymentModuleFrontController extends ModuleFrontController
 			Tools::redirect('index.php?controller=order');
 
 		$total = sprintf(
-			$this->l('%1$s (tax incl.)'),
+			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.BankWire.Shop'),
 			Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
 		);
 

@@ -48,7 +48,7 @@ foreach (Module::getPaymentModules() as $module)
 		break;
 	}
 if (!$authorized)
-	die($bankwire->l('This payment method is not available.', 'validation'));
+	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.BankWire.Shop'));
 
 $customer = new Customer((int)$cart->id_customer);
 

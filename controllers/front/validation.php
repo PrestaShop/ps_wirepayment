@@ -47,7 +47,7 @@ class BankwireValidationModuleFrontController extends ModuleFrontController
 				break;
 			}
 		if (!$authorized)
-			die($this->module->l('This payment method is not available.', 'validation'));
+			die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.BankWire.Shop'));
 
 		$customer = new Customer($cart->id_customer);
 		if (!Validate::isLoadedObject($customer))
