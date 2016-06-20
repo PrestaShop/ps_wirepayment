@@ -70,14 +70,14 @@ class BankWire extends PaymentModule
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->l('Bank wire');
-        $this->description = $this->l('Accept payments for your products via bank wire transfer.');
-        $this->confirmUninstall = $this->l('Are you sure about removing these details?');
+        $this->displayName = $this->getTranslator()->trans('Bank wire', array(), 'Modules.BankWire.Admin');
+        $this->description = $this->getTranslator()->trans('Accept payments for your products via bank wire transfer.', array(), 'Modules.BankWire.Admin');
+        $this->confirmUninstall = $this->getTranslator()->trans('Are you sure about removing these details?', array(), 'Modules.BankWire.Admin');
         if (!isset($this->owner) || !isset($this->details) || !isset($this->address)) {
-            $this->warning = $this->l('Account owner and account details must be configured before using this module.');
+            $this->warning = $this->getTranslator()->trans('Account owner and account details must be configured before using this module.', array(), 'Modules.BankWire.Admin');
         }
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
-            $this->warning = $this->l('No currency has been set for this module.');
+            $this->warning = $this->getTranslator()->trans('No currency has been set for this module.', array(), 'Modules.BankWire.Admin');
         }
 
         $this->extra_mail_vars = array(
@@ -118,9 +118,9 @@ class BankWire extends PaymentModule
     {
         if (Tools::isSubmit('btnSubmit')) {
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
-                $this->_postErrors[] = $this->l('Account details are required.');
+                $this->_postErrors[] = $this->getTranslator()->trans('Account details are required.', array(), 'Modules.BankWire.Admin');
             } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
-                $this->_postErrors[] = $this->l('Account owner is required.');
+                $this->_postErrors[] = $this->getTranslator()->trans('Account owner is required.', array(), "Modules.BankWire.Admin");
             }
         }
     }
@@ -142,7 +142,7 @@ class BankWire extends PaymentModule
             Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
             Configuration::updateValue('BANK_WIRE_CUSTOM_TEXT', $custom_text);
         }
-        $this->_html .= $this->displayConfirmation($this->l('Settings updated'));
+        $this->_html .= $this->displayConfirmation($this->getTranslator()->trans('Settings updated', array(), 'Admin.Global'));
     }
 
     protected function _displayBankWire()
@@ -186,7 +186,7 @@ class BankWire extends PaymentModule
         );
 
         $newOption = new PaymentOption();
-        $newOption->setCallToActionText($this->l('Pay by Bank Wire'))
+        $newOption->setCallToActionText($this->getTranslator()->trans('Pay by Bank Wire', array(), 'Modules.BankWire.Shop'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
                       ->setAdditionalInformation($this->context->smarty->fetch('module:bankwire/views/templates/hook/bankwire_intro.tpl'));
         $payment_options = [
@@ -268,32 +268,32 @@ class BankWire extends PaymentModule
         $fields_form = array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->l('Contact details'),
+                    'title' => $this->getTranslator()->trans('Contact details', array(), 'Modules.BankWire.Admin'),
                     'icon' => 'icon-envelope'
                 ),
                 'input' => array(
                     array(
                         'type' => 'text',
-                        'label' => $this->l('Account owner'),
+                        'label' => $this->getTranslator()->trans('Account owner', array(), 'Modules.BankWire.Admin'),
                         'name' => 'BANK_WIRE_OWNER',
                         'required' => true
                     ),
                     array(
                         'type' => 'textarea',
-                        'label' => $this->l('Details'),
+                        'label' => $this->getTranslator()->trans('Details', array(), 'Modules.BankWire.Admin'),
                         'name' => 'BANK_WIRE_DETAILS',
-                        'desc' => $this->l('Such as bank branch, IBAN number, BIC, etc.'),
+                        'desc' => $this->getTranslator()->trans('Such as bank branch, IBAN number, BIC, etc.', array(), 'Modules.BankWire.Admin'),
                         'required' => true
                     ),
                     array(
                         'type' => 'textarea',
-                        'label' => $this->l('Bank address'),
+                        'label' => $this->getTranslator()->trans('Bank address', array(), 'Modules.BankWire.Admin'),
                         'name' => 'BANK_WIRE_ADDRESS',
                         'required' => true
                     ),
                 ),
                 'submit' => array(
-                    'title' => $this->l('Save'),
+                    'title' => $this->getTranslator()->trans('Save', array(), 'Admin.Actions'),
                 )
             ),
         );
@@ -370,7 +370,7 @@ class BankWire extends PaymentModule
     {
         $cart = $this->context->cart;
         $total = sprintf(
-            $this->l('%1$s (tax incl.)'),
+            $this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.BankWire.Shop'),
             Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
         );
 
