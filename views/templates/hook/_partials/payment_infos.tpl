@@ -25,12 +25,12 @@
 
 
 <dl>
-    <dt>{l s='Amount' mod='bankwire'}</dt>
+    <dt>{l s='Amount' mod='ps_wirepayment'}</dt>
     <dd>{$total}</dd>
-    <dt>{l s='Name of account owner' mod='bankwire'}</dt>
+    <dt>{l s='Name of account owner' mod='ps_wirepayment'}</dt>
     <dd>{$bankwireOwner}</dd>
-    <dt>{l s='Please include these details' mod='bankwire'}</dt>
+    <dt>{l s='Please include these details' mod='ps_wirepayment'}</dt>
     <dd>{$bankwireDetails}</dd>
-    <dt>{l s='Bank name' mod='bankwire'}</dt>
+    <dt>{l s='Bank name' mod='ps_wirepayment'}</dt>
     <dd>{$bankwireAddress nofilter}</dd>
 </dl>

@@ -25,10 +25,10 @@
 
 <section>
   <p>
-    {l s='Transfer the total amount to our bank account. You\'ll receive details about our bank account once the order is confirmed.' mod='bankwire'}
-    {l s='Goods will be reserved %d days for you and we\'ll process the order immediately after receiving the payment.'|sprintf:$bankwireReservationDays mod='bankwire'}
+    {l s='Transfer the total amount to our bank account. You\'ll receive details about our bank account once the order is confirmed.' mod='ps_wirepayment'}
+    {l s='Goods will be reserved %d days for you and we\'ll process the order immediately after receiving the payment.'|sprintf:$bankwireReservationDays mod='ps_wirepayment'}
     {if $bankwireCustomText }
-        <a data-toggle="modal" data-target="#bankwire-modal">{l s='More information' mod='bankwire'}</a>
+        <a data-toggle="modal" data-target="#bankwire-modal">{l s='More information' mod='ps_wirepayment'}</a>
     {/if}
   </p>
 
@@ -39,11 +39,11 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h2>{l s='Bankwire' mod='bankwire'}</h2>
+          <h2>{l s='Bankwire' mod='ps_wirepayment'}</h2>
         </div>
         <div class="modal-body">
-          <p>{l s='Payment is made by transfert of the invoice amount to the following account:' mod='bankwire'}</p>
-          {include file='module:bankwire/views/templates/hook/_partials/payment_infos.tpl'}
+          <p>{l s='Payment is made by transfert of the invoice amount to the following account:' mod='ps_wirepayment'}</p>
+          {include file='module:ps_wirepayment/views/templates/hook/_partials/payment_infos.tpl'}
           {$bankwireCustomText nofilter}
         </div>
       </div>

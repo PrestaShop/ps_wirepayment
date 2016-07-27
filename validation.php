@@ -34,7 +34,7 @@ include(dirname(__FILE__).'/../../init.php');
 
 $context = Context::getContext();
 $cart = $context->cart;
-$bankwire = Module::getInstanceByName('bankwire');
+$bankwire = Module::getInstanceByName('ps_wirepayment');
 
 if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$bankwire->active)
 	Tools::redirect('index.php?controller=order&step=1');
@@ -42,13 +42,13 @@ if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_addr
 // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
 $authorized = false;
 foreach (Module::getPaymentModules() as $module)
-	if ($module['name'] == 'bankwire')
+	if ($module['name'] == 'ps_wirepayment')
 	{
 		$authorized = true;
 		break;
 	}
 if (!$authorized)
-	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.BankWire.Shop'));
+	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.WirePayment.Shop'));
 
 $customer = new Customer((int)$cart->id_customer);
 

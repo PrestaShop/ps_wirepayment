@@ -25,21 +25,21 @@
 
 {if $status == 'ok'}
     <p>
-      {l s='Your order on %s is complete.' sprintf=[$shop_name] mod='bankwire'}<br/>
-      {l s='Please send us a bank wire with:' mod='bankwire'}
+      {l s='Your order on %s is complete.' sprintf=[$shop_name] mod='ps_wirepayment'}<br/>
+      {l s='Please send us a bank wire with:' mod='ps_wirepayment'}
     </p>
-    {include file='module:bankwire/views/templates/hook/_partials/payment_infos.tpl'}
+    {include file='module:ps_wirepayment/views/templates/hook/_partials/payment_infos.tpl'}
 
     <p>
-      {l s='Please specify your order reference %s in the bankwire description.' sprintf=[$reference] mod='bankwire'}<br/>
-      {l s='We\'ve also sent you this information by e-mail.' mod='bankwire'}
+      {l s='Please specify your order reference %s in the bankwire description.' sprintf=[$reference] mod='ps_wirepayment'}<br/>
+      {l s='We\'ve also sent you this information by e-mail.' mod='ps_wirepayment'}
     </p>
-    <strong>{l s='Your order will be sent as soon as we receive payment.' mod='bankwire'}</strong>
+    <strong>{l s='Your order will be sent as soon as we receive payment.' mod='ps_wirepayment'}</strong>
     <p>
-      {l s='If you have questions, comments or concerns, please contact our [1]expert customer support team[/1].' mod='bankwire' tags=["<a href='{$contact_url}'>"]}
+      {l s='If you have questions, comments or concerns, please contact our [1]expert customer support team[/1].' mod='ps_wirepayment' tags=["<a href='{$contact_url}'>"]}
     </p>
 {else}
     <p class="warning">
-      {l s='We noticed a problem with your order. If you think this is an error, feel free to contact our [1]expert customer support team[/1].' mod='bankwire' tags=["<a href='{$contact_url}'>"]}
+      {l s='We noticed a problem with your order. If you think this is an error, feel free to contact our [1]expert customer support team[/1].' mod='ps_wirepayment' tags=["<a href='{$contact_url}'>"]}
     </p>
 {/if}

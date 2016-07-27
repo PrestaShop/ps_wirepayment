@@ -27,7 +27,7 @@
 /**
  * @since 1.5.0
  */
-class BankwirePaymentModuleFrontController extends ModuleFrontController
+class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 {
 	public $ssl = true;
 	public $display_column_left = false;
@@ -44,14 +44,14 @@ class BankwirePaymentModuleFrontController extends ModuleFrontController
 			Tools::redirect('index.php?controller=order');
 
 		$total = sprintf(
-			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.BankWire.Shop'),
+			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.WirePayment.Shop'),
 			Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
 		);
 
 		$this->context->smarty->assign(array(
-            'back_url' => $this->context->link->getPageLink('order', true, NULL, "step=3"),
-			'confirm_url' => $this->context->link->getModuleLink('bankwire', 'validation', [], true),
-			'image_url' => $this->module->getPathUri() . 'bankwire.jpg',
+      'back_url' => $this->context->link->getPageLink('order', true, NULL, "step=3"),
+			'confirm_url' => $this->context->link->getModuleLink('ps_wirepayment', 'validation', [], true),
+			'image_url' => $this->module->getPathUri() . 'ps_wirepayment.jpg',
 			'cust_currency' => $cart->id_currency,
 			'currencies' => $this->module->getCurrency((int)$cart->id_currency),
 			'total' => $total,

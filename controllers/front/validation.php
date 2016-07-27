@@ -27,7 +27,7 @@
 /**
  * @since 1.5.0
  */
-class BankwireValidationModuleFrontController extends ModuleFrontController
+class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontController
 {
 	/**
 	 * @see FrontController::postProcess()
@@ -41,13 +41,13 @@ class BankwireValidationModuleFrontController extends ModuleFrontController
 		// Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
 		$authorized = false;
 		foreach (Module::getPaymentModules() as $module)
-			if ($module['name'] == 'bankwire')
+			if ($module['name'] == 'ps_wirepayment')
 			{
 				$authorized = true;
 				break;
 			}
 		if (!$authorized)
-			die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.BankWire.Shop'));
+			die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.WirePayment.Shop'));
 
 		$customer = new Customer($cart->id_customer);
 		if (!Validate::isLoadedObject($customer))
