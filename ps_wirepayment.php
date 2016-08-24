@@ -186,7 +186,7 @@ class Ps_Wirepayment extends PaymentModule
         );
 
         $newOption = new PaymentOption();
-        $newOption->setCallToActionText($this->trans('Pay by Bank Wire', array(), 'ModulesWirePayment.Shop'))
+        $newOption->setCallToActionText($this->trans('Pay by Bank Wire', array(), 'Modules.WirePayment.Shop'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
                       ->setAdditionalInformation($this->context->smarty->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
         $payment_options = [
@@ -370,7 +370,7 @@ class Ps_Wirepayment extends PaymentModule
     {
         $cart = $this->context->cart;
         $total = sprintf(
-            $this->trans('%1$s (tax incl.)', array(), 'ModulesWirePayment.Shop'),
+            $this->trans('%1$s (tax incl.)', array(), 'Modules.WirePayment.Shop'),
             Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
         );
 
