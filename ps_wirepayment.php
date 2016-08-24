@@ -324,6 +324,27 @@ class Ps_Wirepayment extends PaymentModule
                         'desc' => $this->trans('Information about the bankwire (processing time, starting of the shipping...)', array(), 'Modules.WirePayment.Admin'),
                         'lang' => true
                     ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Display the invitation to pay in the order confirmation page'),
+                        'name' => self::FLAG_DISPLAY_PAYMENT_INVITE,
+                        'is_bool' => true,
+                        'hint' => $this->l('Your country\'s legislation may require you to send the invitation ' .
+                            'to pay by email only. Disabling the option will hide the invitation ' .
+                            'on the confirmation page.'),
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => true,
+                                'label' => $this->l('Enabled'),
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => false,
+                                'label' => $this->l('Disabled'),
+                            )
+                        ),
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->trans('Save'),
