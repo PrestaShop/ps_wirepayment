@@ -32,6 +32,8 @@ if (!defined('_PS_VERSION_')) {
 
 class Ps_Wirepayment extends PaymentModule
 {
+    const FLAG_DISPLAY_PAYMENT_INVITE = 'BANK_WIRE_PAYMENT_INVITE';
+
     protected $_html = '';
     protected $_postErrors = array();
 
@@ -89,6 +91,7 @@ class Ps_Wirepayment extends PaymentModule
 
     public function install()
     {
+        Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE, true);
         if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions')) {
             return false;
         }
