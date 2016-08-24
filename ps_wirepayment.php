@@ -205,7 +205,7 @@ class Ps_Wirepayment extends PaymentModule
 
     public function hookPaymentReturn($params)
     {
-        if (!$this->active) {
+        if (!$this->active || !Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE)) {
             return;
         }
 
