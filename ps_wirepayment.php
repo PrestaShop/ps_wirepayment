@@ -121,6 +121,9 @@ class Ps_Wirepayment extends PaymentModule
     protected function _postValidation()
     {
         if (Tools::isSubmit('btnSubmit')) {
+            Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
+                Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE));
+
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
                 $this->_postErrors[] = $this->trans('Account details are required.', array(), 'Modules.WirePayment.Admin');
             } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
