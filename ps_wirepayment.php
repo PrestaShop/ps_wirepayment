@@ -111,6 +111,7 @@ class Ps_Wirepayment extends PaymentModule
                 || !Configuration::deleteByName('BANK_WIRE_OWNER')
                 || !Configuration::deleteByName('BANK_WIRE_ADDRESS')
                 || !Configuration::deleteByName('BANK_WIRE_RESERVATION_DAYS')
+                || !Configuration::deleteByName(self::FLAG_DISPLAY_PAYMENT_INVITE)
                 || !parent::uninstall()) {
             return false;
         }
