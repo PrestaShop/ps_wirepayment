@@ -30,6 +30,10 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+if (version_compare(_PS_VERSION_, '1.7.0.0', '<')) {
+    return;
+}
+
 class Ps_Wirepayment extends PaymentModule
 {
     const FLAG_DISPLAY_PAYMENT_INVITE = 'BANK_WIRE_PAYMENT_INVITE';
