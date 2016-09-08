@@ -47,7 +47,7 @@ class Ps_Wirepayment extends PaymentModule
         $this->name = 'ps_wirepayment';
         $this->tab = 'payments_gateways';
         $this->version = '1.0.3';
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
         $this->author = 'PrestaShop';
         $this->controllers = array('payment', 'validation');
         $this->is_eu_compatible = 1;
