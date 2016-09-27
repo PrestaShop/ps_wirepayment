@@ -154,7 +154,7 @@ class Ps_Wirepayment extends PaymentModule
 
     protected function _displayBankWire()
     {
-        return $this->display(__FILE__, 'infos.tpl');
+        return $this->fetch('module:ps_wirepayment/views/templates/hook/infos.tpl');
     }
 
     public function getContent()
@@ -188,14 +188,14 @@ class Ps_Wirepayment extends PaymentModule
             return;
         }
 
-        $this->context->smarty->assign(
+        $this->smarty->assign(
             $this->getTemplateVarInfos()
         );
 
         $newOption = new PaymentOption();
         $newOption->setCallToActionText($this->trans('Pay by Bank Wire', array(), 'Modules.WirePayment.Shop'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
-                      ->setAdditionalInformation($this->context->smarty->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
+                      ->setAdditionalInformation($this->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
         $payment_options = [
             $newOption,
         ];
@@ -252,7 +252,7 @@ class Ps_Wirepayment extends PaymentModule
             $this->smarty->assign('status', 'failed');
         }
 
-        return $this->display(__FILE__, 'payment_return.tpl');
+        return $this->fetch('module:ps_wirepayment/views/templates/hook/payment_return.tpl');
     }
 
     public function checkCurrency($cart)
