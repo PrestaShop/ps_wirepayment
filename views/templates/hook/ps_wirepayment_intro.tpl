@@ -42,7 +42,7 @@
           <h2>{l s='Bankwire' mod='ps_wirepayment'}</h2>
         </div>
         <div class="modal-body">
-          <p>{l s='Payment is made by transfert of the invoice amount to the following account:' mod='ps_wirepayment'}</p>
+          <p>{l s='Payment is made by transfer of the invoice amount to the following account:' mod='ps_wirepayment'}</p>
           {include file='module:ps_wirepayment/views/templates/hook/_partials/payment_infos.tpl'}
           {$bankwireCustomText nofilter}
         </div>
