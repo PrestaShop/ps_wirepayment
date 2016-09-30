@@ -25,7 +25,7 @@
 
 <section>
   <p>
-    {l s='Transfer the total amount to our bank account. You\'ll receive details about our bank account once the order is confirmed.' mod='ps_wirepayment'}
+    {l s='Please transfer the invoice amount to our bank account. You will receive our order confirmation per email containing bank details and order number.' mod='ps_wirepayment'}
     {l s='Goods will be reserved %s days for you and we\'ll process the order immediately after receiving the payment.' sprintf=[$bankwireReservationDays] mod='ps_wirepayment'}
     {if $bankwireCustomText }
         <a data-toggle="modal" data-target="#bankwire-modal">{l s='More information' mod='ps_wirepayment'}</a>
