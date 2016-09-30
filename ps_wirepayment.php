@@ -154,7 +154,7 @@ class Ps_Wirepayment extends PaymentModule
 
     protected function _displayBankWire()
     {
-        return $this->fetch('module:ps_wirepayment/views/templates/hook/infos.tpl');
+        return $this->display(__FILE__, 'infos.tpl');
     }
 
     public function getContent()
