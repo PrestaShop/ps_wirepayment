@@ -26,6 +26,6 @@
 <div class="alert alert-info">
 <img src="../modules/ps_wirepayment/logo.png" style="float:left; margin-right:15px;" height="60">
 <p><strong>{l s="This module allows you to accept secure payments by bank wire." d='Modules.WirePayment.Admin'}</strong></p>
-<p>{l s="If the client chooses to pay by bank wire, the order's status will change to 'Waiting for Payment.'" d='Modules.WirePayment.Admin'}</p>
+<p>{l s="If the client chooses to pay by bank wire, the order's status will change to 'Waiting for Payment'." d='Modules.WirePayment.Admin'}</p>
 <p>{l s="That said, you must manually confirm the order upon receiving the bank wire." d='Modules.WirePayment.Admin'}</p>
 </div>

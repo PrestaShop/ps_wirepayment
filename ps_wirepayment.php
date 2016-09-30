@@ -193,7 +193,7 @@ class Ps_Wirepayment extends PaymentModule
         );
 
         $newOption = new PaymentOption();
-        $newOption->setCallToActionText($this->trans('Pay by Bank Wire', array(), 'Modules.WirePayment.Shop'))
+        $newOption->setCallToActionText($this->trans('Pay by bank wire', array(), 'Modules.WirePayment.Shop'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
                       ->setAdditionalInformation($this->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
         $payment_options = [
@@ -287,7 +287,7 @@ class Ps_Wirepayment extends PaymentModule
                     ),
                     array(
                         'type' => 'textarea',
-                        'label' => $this->trans('Details', array(), 'Modules.WirePayment.Admin'),
+                        'label' => $this->trans('Account details', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_DETAILS',
                         'desc' => $this->trans('Such as bank branch, IBAN number, BIC, etc.', array(), 'Modules.WirePayment.Admin'),
                         'required' => true
@@ -313,7 +313,7 @@ class Ps_Wirepayment extends PaymentModule
                 'input' => array(
                     array(
                         'type' => 'text',
-                        'label' => $this->trans('Reservation delay', array(), 'Modules.WirePayment.Admin'),
+                        'label' => $this->trans('Reservation period', array(), 'Modules.WirePayment.Admin'),
                         'desc' => $this->trans('Number of days the goods will be reserved', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_RESERVATION_DAYS',
                     ),
@@ -321,7 +321,7 @@ class Ps_Wirepayment extends PaymentModule
                         'type' => 'textarea',
                         'label' => $this->trans('Information to the customer', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_CUSTOM_TEXT',
-                        'desc' => $this->trans('Information about the bankwire (processing time, starting of the shipping...)', array(), 'Modules.WirePayment.Admin'),
+                        'desc' => $this->trans('Information on the bank transfer (processing time, starting of the shipping...)', array(), 'Modules.WirePayment.Admin'),
                         'lang' => true
                     ),
                     array(
