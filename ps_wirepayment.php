@@ -73,7 +73,7 @@ class Ps_Wirepayment extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->trans('Wire payment', array(), 'Modules.WirePayment.Admin');
-        $this->description = $this->trans('Accept payments for your products via bank wire transfer.', array(), 'Modules.WirePayment.Admin');
+        $this->description = $this->trans('Accept payments by bank transfer.', array(), 'Modules.WirePayment.Admin');
         $this->confirmUninstall = $this->trans('Are you sure about removing these details?', array(), 'Modules.WirePayment.Admin');
         if (!isset($this->owner) || !isset($this->details) || !isset($this->address)) {
             $this->warning = $this->trans('Account owner and account details must be configured before using this module.', array(), 'Modules.WirePayment.Admin');
@@ -193,7 +193,7 @@ class Ps_Wirepayment extends PaymentModule
         );
 
         $newOption = new PaymentOption();
-        $newOption->setCallToActionText($this->trans('Pay by Bank Wire', array(), 'Modules.WirePayment.Shop'))
+        $newOption->setCallToActionText($this->trans('Pay by bank wire', array(), 'Modules.WirePayment.Shop'))
                       ->setAction($this->context->link->getModuleLink($this->name, 'validation', array(), true))
                       ->setAdditionalInformation($this->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
         $payment_options = [
@@ -275,7 +275,7 @@ class Ps_Wirepayment extends PaymentModule
         $fields_form = array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->trans('Contact details', array(), 'Modules.WirePayment.Admin'),
+                    'title' => $this->trans('Account details', array(), 'Modules.WirePayment.Admin'),
                     'icon' => 'icon-envelope'
                 ),
                 'input' => array(
@@ -287,7 +287,7 @@ class Ps_Wirepayment extends PaymentModule
                     ),
                     array(
                         'type' => 'textarea',
-                        'label' => $this->trans('Details', array(), 'Modules.WirePayment.Admin'),
+                        'label' => $this->trans('Account details', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_DETAILS',
                         'desc' => $this->trans('Such as bank branch, IBAN number, BIC, etc.', array(), 'Modules.WirePayment.Admin'),
                         'required' => true
@@ -313,15 +313,15 @@ class Ps_Wirepayment extends PaymentModule
                 'input' => array(
                     array(
                         'type' => 'text',
-                        'label' => $this->trans('Reservation delay', array(), 'Modules.WirePayment.Admin'),
-                        'desc' => $this->trans('Number of days the goods will be reserved', array(), 'Modules.WirePayment.Admin'),
+                        'label' => $this->trans('Reservation period', array(), 'Modules.WirePayment.Admin'),
+                        'desc' => $this->trans('Number of days the items remain reserved', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_RESERVATION_DAYS',
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->trans('Information to the customer', array(), 'Modules.WirePayment.Admin'),
                         'name' => 'BANK_WIRE_CUSTOM_TEXT',
-                        'desc' => $this->trans('Information about the bankwire (processing time, starting of the shipping...)', array(), 'Modules.WirePayment.Admin'),
+                        'desc' => $this->trans('Information on the bank transfer (processing time, starting of the shipping...)', array(), 'Modules.WirePayment.Admin'),
                         'lang' => true
                     ),
                     array(
