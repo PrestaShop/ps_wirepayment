@@ -249,7 +249,12 @@ class Ps_Wirepayment extends PaymentModule
                 'contact_url' => $this->context->link->getPageLink('contact', true)
             ));
         } else {
-            $this->smarty->assign('status', 'failed');
+            $this->smarty->assign(
+                array(
+                    'status' => 'failed',
+                    'contact_url' => $this->context->link->getPageLink('contact', true),
+                )
+            );
         }
 
         return $this->fetch('module:ps_wirepayment/views/templates/hook/payment_return.tpl');
