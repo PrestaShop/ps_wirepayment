@@ -23,7 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
 <dl>
     <dt>{l s='Amount' mod='ps_wirepayment'}</dt>
     <dd>{$total}</dd>
