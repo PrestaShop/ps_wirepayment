@@ -181,11 +181,11 @@ class Ps_Wirepayment extends PaymentModule
     public function hookPaymentOptions($params)
     {
         if (!$this->active) {
-            return;
+            return [];
         }
 
         if (!$this->checkCurrency($params['cart'])) {
-            return;
+            return [];
         }
 
         $this->smarty->assign(
