@@ -30,7 +30,7 @@
     <dt>{l s='Name of account owner' mod='ps_wirepayment'}</dt>
     <dd>{$bankwireOwner}</dd>
     <dt>{l s='Please include these details' mod='ps_wirepayment'}</dt>
-    <dd>{$bankwireDetails}</dd>
+    <dd>{$bankwireDetails nofilter}</dd>
     <dt>{l s='Bank name' mod='ps_wirepayment'}</dt>
     <dd>{$bankwireAddress nofilter}</dd>
 </dl>
