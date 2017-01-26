@@ -2,7 +2,7 @@
 <module>
 	<name>ps_wirepayment</name>
 	<displayName><![CDATA[Wire payment]]></displayName>
-	<version><![CDATA[1.0.9]]></version>
+	<version><![CDATA[1.0.10]]></version>
 	<description><![CDATA[Accept payments by bank transfer.]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
