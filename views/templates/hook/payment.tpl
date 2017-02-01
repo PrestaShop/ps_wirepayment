@@ -24,8 +24,8 @@
 *}
 
 <p class="payment_module">
-	<a href="{$link->getModuleLink('ps_wirepayment', 'payment')|escape:'html'}" title="{l s='Pay by bank wire' d='Modules.WirePayment.Shop'}">
-		<img src="{$this_path_bw}logo.png" alt="{l s='Pay by bank wire' d='Modules.WirePayment.Shop'}" width="86" height="49"/>
-		{l s='Pay by bank wire' d='Modules.WirePayment.Shop'}&nbsp;<span>{l s='(order processing will be longer)' d='Modules.WirePayment.Shop'}</span>
+	<a href="{$link->getModuleLink('ps_wirepayment', 'payment')|escape:'html'}" title="{l s='Pay by bank wire' d='Modules.Wirepayment.Shop'}">
+		<img src="{$this_path_bw}logo.png" alt="{l s='Pay by bank wire' d='Modules.Wirepayment.Shop'}" width="86" height="49"/>
+		{l s='Pay by bank wire' d='Modules.Wirepayment.Shop'}&nbsp;<span>{l s='(order processing will be longer)' d='Modules.Wirepayment.Shop'}</span>
 	</a>
 </p>
