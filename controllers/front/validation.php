@@ -47,7 +47,7 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
 				break;
 			}
 		if (!$authorized)
-			die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.WirePayment.Shop'));
+			die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.Wirepayment.Shop'));
 
 		$customer = new Customer($cart->id_customer);
 		if (!Validate::isLoadedObject($customer))

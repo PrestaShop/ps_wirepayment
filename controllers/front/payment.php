@@ -43,7 +43,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 			Tools::redirect('index.php?controller=order');
 
 		$total = sprintf(
-			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.WirePayment.Shop'),
+			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.Wirepayment.Shop'),
 			Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
 		);
 

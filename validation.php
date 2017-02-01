@@ -48,7 +48,7 @@ foreach (Module::getPaymentModules() as $module)
 		break;
 	}
 if (!$authorized)
-	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.WirePayment.Shop'));
+	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.Wirepayment.Shop'));
 
 $customer = new Customer((int)$cart->id_customer);
 
