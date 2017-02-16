@@ -332,28 +332,28 @@ class Ps_Wirepayment extends PaymentModule
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('Display the invitation to pay in the order confirmation page'),
+                        'label' => $this->trans('Display the invitation to pay in the order confirmation page', array(), 'Modules.Wirepayment.Admin'),
                         'name' => self::FLAG_DISPLAY_PAYMENT_INVITE,
                         'is_bool' => true,
-                        'hint' => $this->l('Your country\'s legislation may require you to send the invitation ' .
+                        'hint' => $this->trans('Your country\'s legislation may require you to send the invitation ' .
                             'to pay by email only. Disabling the option will hide the invitation ' .
-                            'on the confirmation page.'),
+                            'on the confirmation page.', array(), 'Modules.Wirepayment.Admin'),
                         'values' => array(
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Enabled'),
+                                'label' => $this->trans('Enabled', array(), 'Admin.Global'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('Disabled'),
+                                'label' => $this->trans('Disabled', array(), 'Admin.Global'),
                             )
                         ),
                     ),
                 ),
                 'submit' => array(
-                    'title' => $this->trans('Save'),
+                    'title' => $this->trans('Save', array(), 'Admin.Global'),
                 )
             ),
         );
