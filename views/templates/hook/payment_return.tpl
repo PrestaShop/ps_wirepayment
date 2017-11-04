@@ -26,13 +26,22 @@
 {if $status == 'ok'}
     <p>
       {l s='Your order on %s is complete.' sprintf=[$shop_name] d='Modules.Wirepayment.Shop'}<br/>
-      {l s='Please send us a bank wire with:' d='Modules.Wirepayment.Shop'}
+      {l s='Please send us a bankwire with the following details:' d='Modules.Wirepayment.Shop'}
     </p>
-    {include file='module:ps_wirepayment/views/templates/hook/_partials/payment_infos.tpl'}
-
+	<dl>
+		<dt>{l s='Amount' d='Modules.Wirepayment.Shop'}</dt>
+		<dd>{$total}</dd>
+		<dt>{l s='Name of account owner' d='Modules.Wirepayment.Shop'}</dt>
+		<dd>{$bankwireOwner}</dd>
+		<dt>{l s='Bank account' d='Modules.Wirepayment.Shop'}</dt>
+		<dd>{$bankwireDetails nofilter}</dd>
+		<dt>{l s='Bank name' d='Modules.Wirepayment.Shop'}</dt>
+		<dd>{$bankwireAddress nofilter}</dd>
+		<dt>{l s='Please specify your order number as reason for payment' d='Modules.Wirepayment.Shop'}</dt>
+		<dd>{$reference}</dd>
+	</dl>
     <p>
-      {l s='Please specify your order reference %s in the bankwire description.' sprintf=[$reference] d='Modules.Wirepayment.Shop'}<br/>
-      {l s='We\'ve also sent you this information by e-mail.' d='Modules.Wirepayment.Shop'}
+      {l s='We have also sent you this information by e-mail.' d='Modules.Wirepayment.Shop'}
     </p>
     <strong>{l s='Your order will be sent as soon as we receive payment.' d='Modules.Wirepayment.Shop'}</strong>
     <p>
