@@ -235,10 +235,11 @@ class Ps_Wirepayment extends PaymentModule
                 $bankwireAddress = '___________';
             }
 
+            $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
             $this->smarty->assign(array(
                 'shop_name' => $this->context->shop->name,
                 'total' => Tools::displayPrice(
-                    $params['order']->getOrdersTotalPaid(),
+                    $totalToPaid,
                     new Currency($params['order']->id_currency),
                     false
                 ),
