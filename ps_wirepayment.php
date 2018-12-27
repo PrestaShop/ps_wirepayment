@@ -142,8 +142,8 @@ class Ps_Wirepayment extends PaymentModule
             $custom_text = array();
             $languages = Language::getLanguages(false);
             foreach ($languages as $lang) {
-                if (Tools::getIsset('BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang'])) {
-                    $custom_text[$lang['id_lang']] = Tools::getValue('BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang']);
+                if (Tools::getIsset('BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang'])) {
+                    $custom_text[$lang['id_lang']] = Tools::getValue('BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang']);
                 }
             }
             Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
@@ -366,8 +366,8 @@ class Ps_Wirepayment extends PaymentModule
         $helper->id = (int)Tools::getValue('id_carrier');
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'btnSubmit';
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false).'&configure='
-            .$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure='
+            . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFieldsValues(),
@@ -384,7 +384,7 @@ class Ps_Wirepayment extends PaymentModule
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
             $custom_text[$lang['id_lang']] = Tools::getValue(
-                'BANK_WIRE_CUSTOM_TEXT_'.$lang['id_lang'],
+                'BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang'],
                 Configuration::get('BANK_WIRE_CUSTOM_TEXT', $lang['id_lang'])
             );
         }

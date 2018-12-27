@@ -55,7 +55,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 			'currencies' => $this->module->getCurrency((int)$cart->id_currency),
 			'total' => $total,
 			'this_path' => $this->module->getPathUri(),
-			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->module->name.'/'
+			'this_path_ssl' => Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ . 'modules/' . $this->module->name . '/'
 		));
 
 		$this->setTemplate('payment_execution.tpl');
