@@ -99,6 +99,7 @@ class Ps_Wirepayment extends PaymentModule
         if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions')) {
             return false;
         }
+
         return true;
     }
 
@@ -119,6 +120,7 @@ class Ps_Wirepayment extends PaymentModule
                 || !parent::uninstall()) {
             return false;
         }
+
         return true;
     }
 
@@ -277,6 +279,7 @@ class Ps_Wirepayment extends PaymentModule
                 }
             }
         }
+
         return false;
     }
 
