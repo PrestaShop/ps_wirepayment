@@ -247,7 +247,7 @@ class Ps_Wirepayment extends PaymentModule
                 'bankwireOwner' => $bankwireOwner,
                 'status' => 'ok',
                 'reference' => $params['order']->reference,
-                'contact_url' => $this->context->link->getPageLink('contact', true)
+                'contact_url' => $this->context->link->getPageLink('contact', true),
             ));
         } else {
             $this->smarty->assign(
@@ -282,39 +282,39 @@ class Ps_Wirepayment extends PaymentModule
             'form' => array(
                 'legend' => array(
                     'title' => $this->trans('Account details', array(), 'Modules.Wirepayment.Admin'),
-                    'icon' => 'icon-envelope'
+                    'icon' => 'icon-envelope',
                 ),
                 'input' => array(
                     array(
                         'type' => 'text',
                         'label' => $this->trans('Account owner', array(), 'Modules.Wirepayment.Admin'),
                         'name' => 'BANK_WIRE_OWNER',
-                        'required' => true
+                        'required' => true,
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->trans('Account details', array(), 'Modules.Wirepayment.Admin'),
                         'name' => 'BANK_WIRE_DETAILS',
                         'desc' => $this->trans('Such as bank branch, IBAN number, BIC, etc.', array(), 'Modules.Wirepayment.Admin'),
-                        'required' => true
+                        'required' => true,
                     ),
                     array(
                         'type' => 'textarea',
                         'label' => $this->trans('Bank address', array(), 'Modules.Wirepayment.Admin'),
                         'name' => 'BANK_WIRE_ADDRESS',
-                        'required' => true
+                        'required' => true,
                     ),
                 ),
                 'submit' => array(
                     'title' => $this->trans('Save', array(), 'Admin.Actions'),
-                )
+                ),
             ),
         );
         $fields_form_customization = array(
             'form' => array(
                 'legend' => array(
                     'title' => $this->trans('Customization', array(), 'Modules.Wirepayment.Admin'),
-                    'icon' => 'icon-cogs'
+                    'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
@@ -328,7 +328,7 @@ class Ps_Wirepayment extends PaymentModule
                         'label' => $this->trans('Information to the customer', array(), 'Modules.Wirepayment.Admin'),
                         'name' => 'BANK_WIRE_CUSTOM_TEXT',
                         'desc' => $this->trans('Information on the bank transfer (processing time, starting of the shipping...)', array(), 'Modules.Wirepayment.Admin'),
-                        'lang' => true
+                        'lang' => true,
                     ),
                     array(
                         'type' => 'switch',
@@ -346,13 +346,13 @@ class Ps_Wirepayment extends PaymentModule
                                 'id' => 'active_off',
                                 'value' => false,
                                 'label' => $this->trans('Disabled', array(), 'Admin.Global'),
-                            )
+                            ),
                         ),
                     ),
                 ),
                 'submit' => array(
                     'title' => $this->trans('Save', array(), 'Admin.Actions'),
-                )
+                ),
             ),
         );
 
@@ -372,7 +372,7 @@ class Ps_Wirepayment extends PaymentModule
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFieldsValues(),
             'languages' => $this->context->controller->getLanguages(),
-            'id_language' => $this->context->language->id
+            'id_language' => $this->context->language->id,
         );
 
         return $helper->generateForm(array($fields_form, $fields_form_customization));
@@ -396,7 +396,7 @@ class Ps_Wirepayment extends PaymentModule
             'BANK_WIRE_RESERVATION_DAYS' => Tools::getValue('BANK_WIRE_RESERVATION_DAYS', Configuration::get('BANK_WIRE_RESERVATION_DAYS')),
             'BANK_WIRE_CUSTOM_TEXT' => $custom_text,
             self::FLAG_DISPLAY_PAYMENT_INVITE => Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
-                Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE))
+                Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE)),
         );
     }
 
