@@ -52,7 +52,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 			'confirm_url' => $this->context->link->getModuleLink('ps_wirepayment', 'validation', [], true),
 			'image_url' => $this->module->getPathUri() . 'ps_wirepayment.jpg',
 			'cust_currency' => $cart->id_currency,
-			'currencies' => $this->module->getCurrency((int)$cart->id_currency),
+			'currencies' => $this->module->getCurrency((int) $cart->id_currency),
 			'total' => $total,
 			'this_path' => $this->module->getPathUri(),
 			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->module->name.'/'
