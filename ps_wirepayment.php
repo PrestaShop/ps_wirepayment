@@ -408,7 +408,7 @@ class Ps_Wirepayment extends PaymentModule
             Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
         );
 
-         $bankwireOwner = $this->owner;
+        $bankwireOwner = $this->owner;
         if (!$bankwireOwner) {
             $bankwireOwner = '___________';
         }
