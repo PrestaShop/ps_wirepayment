@@ -48,7 +48,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
         );
 
         $this->context->smarty->assign(array(
-      'back_url' => $this->context->link->getPageLink('order', true, NULL, "step=3"),
+            'back_url' => $this->context->link->getPageLink('order', true, NULL, "step=3"),
             'confirm_url' => $this->context->link->getModuleLink('ps_wirepayment', 'validation', [], true),
             'image_url' => $this->module->getPathUri() . 'ps_wirepayment.jpg',
             'cust_currency' => $cart->id_currency,

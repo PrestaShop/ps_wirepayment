@@ -83,10 +83,10 @@ class Ps_Wirepayment extends PaymentModule
         }
 
         $this->extra_mail_vars = array(
-                                        '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
-                                        '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
-                                        '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS')),
-                                        );
+            '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
+            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
+            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS')),
+        );
     }
 
     public function install()
