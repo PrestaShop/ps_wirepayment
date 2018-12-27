@@ -48,7 +48,7 @@ foreach (Module::getPaymentModules() as $module)
 		break;
 	}
 if (!$authorized)
-	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.Wirepayment.Shop'));
+	die($bankwire->getTranslator()->trans('This payment method is not available.', [], 'Modules.Wirepayment.Shop'));
 
 $customer = new Customer((int)$cart->id_customer);
 
@@ -58,7 +58,7 @@ if (!Validate::isLoadedObject($customer))
 $currency = $context->currency;
 $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
 
-$bankwire->validateOrder($cart->id, Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, NULL, array(), (int)$currency->id, false, $customer->secure_key);
+$bankwire->validateOrder($cart->id, Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, NULL, [], (int)$currency->id, false, $customer->secure_key);
 
 $order = new Order($bankwire->currentOrder);
 Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$bankwire->id.'&id_order='.$bankwire->currentOrder.'&key='.$customer->secure_key);

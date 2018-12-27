@@ -43,11 +43,11 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 			Tools::redirect('index.php?controller=order');
 
 		$total = sprintf(
-			$this->getTranslator()->trans('%1$s (tax incl.)', array(), 'Modules.Wirepayment.Shop'),
+			$this->getTranslator()->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
 			Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
 		);
 
-		$this->context->smarty->assign(array(
+		$this->context->smarty->assign([
       'back_url' => $this->context->link->getPageLink('order', true, NULL, "step=3"),
 			'confirm_url' => $this->context->link->getModuleLink('ps_wirepayment', 'validation', [], true),
 			'image_url' => $this->module->getPathUri() . 'ps_wirepayment.jpg',
@@ -56,7 +56,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 			'total' => $total,
 			'this_path' => $this->module->getPathUri(),
 			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->module->name.'/'
-		));
+		]);
 
 		$this->setTemplate('payment_execution.tpl');
 	}
