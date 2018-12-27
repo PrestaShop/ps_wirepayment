@@ -28,7 +28,7 @@
  * @deprecated 1.5.0 This file is deprecated, use moduleFrontController instead
  */
 
-/* SSL Management */
+// SSL Management
 $useSSL = true;
 
 require('../../config/config.inc.php');
