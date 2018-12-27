@@ -35,11 +35,15 @@ class Ps_Wirepayment extends PaymentModule
     const FLAG_DISPLAY_PAYMENT_INVITE = 'BANK_WIRE_PAYMENT_INVITE';
 
     protected $_html = '';
+
     protected $_postErrors = array();
 
     public $details;
+
     public $owner;
+
     public $address;
+
     public $extra_mail_vars;
 
     public function __construct()
