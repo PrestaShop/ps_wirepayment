@@ -127,7 +127,7 @@ class Ps_Wirepayment extends PaymentModule
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
                 $this->_postErrors[] = $this->trans('Account details are required.', array(), 'Modules.Wirepayment.Admin');
             } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
-                $this->_postErrors[] = $this->trans('Account owner is required.', array(), "Modules.Wirepayment.Admin");
+                $this->_postErrors[] = $this->trans('Account owner is required.', array(), 'Modules.Wirepayment.Admin');
             }
         }
     }
