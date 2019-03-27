@@ -31,6 +31,8 @@
     <dd>{$bankwireOwner}</dd>
     <dt>{l s='Please include these details' d='Modules.Wirepayment.Shop'}</dt>
     <dd>{$bankwireDetails nofilter}</dd>
+    <dt>{l s='Custom text' d='Modules.Wirepayment.Shop'}</dt>
+    <dd>{$bankwireCustomText nofilter}</dd>
     <dt>{l s='Bank name' d='Modules.Wirepayment.Shop'}</dt>
     <dd>{$bankwireAddress nofilter}</dd>
 </dl>

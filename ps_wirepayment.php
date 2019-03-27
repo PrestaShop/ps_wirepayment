@@ -41,6 +41,7 @@ class Ps_Wirepayment extends PaymentModule
     public $owner;
     public $address;
     public $extra_mail_vars;
+    public $custom_text;
 
     public function __construct()
     {
@@ -54,8 +55,19 @@ class Ps_Wirepayment extends PaymentModule
 
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
+        
 
-        $config = Configuration::getMultiple(array('BANK_WIRE_DETAILS', 'BANK_WIRE_OWNER', 'BANK_WIRE_ADDRESS', 'BANK_WIRE_RESERVATION_DAYS'));
+        $this->bootstrap = true;
+        parent::__construct();
+
+        
+        $config = Configuration::getMultiple(array(
+            'BANK_WIRE_DETAILS',
+            'BANK_WIRE_OWNER',
+            'BANK_WIRE_ADDRESS',
+            'BANK_WIRE_RESERVATION_DAYS',
+        ));
+
         if (!empty($config['BANK_WIRE_OWNER'])) {
             $this->owner = $config['BANK_WIRE_OWNER'];
         }
@@ -69,8 +81,11 @@ class Ps_Wirepayment extends PaymentModule
             $this->reservation_days = $config['BANK_WIRE_RESERVATION_DAYS'];
         }
 
-        $this->bootstrap = true;
-        parent::__construct();
+        $config['BANK_WIRE_CUSTOM_TEXT']=Configuration::get('BANK_WIRE_CUSTOM_TEXT', $this->context->language->id);
+        if (!empty($config['BANK_WIRE_CUSTOM_TEXT'])) {
+            $this->custom_text = $config['BANK_WIRE_CUSTOM_TEXT'];
+        }
+
 
         $this->displayName = $this->trans('Wire payment', array(), 'Modules.Wirepayment.Admin');
         $this->description = $this->trans('Accept payments by bank transfer.', array(), 'Modules.Wirepayment.Admin');
@@ -235,6 +250,11 @@ class Ps_Wirepayment extends PaymentModule
                 $bankwireAddress = '___________';
             }
 
+            $bankwireCustomText = Tools::nl2br($this->custom_text);
+            if (!$bankwireCustomText) {
+                $bankwireCustomText = '___________';
+            }
+
             $this->smarty->assign(array(
                 'shop_name' => $this->context->shop->name,
                 'total' => Tools::displayPrice(
@@ -245,6 +265,7 @@ class Ps_Wirepayment extends PaymentModule
                 'bankwireDetails' => $bankwireDetails,
                 'bankwireAddress' => $bankwireAddress,
                 'bankwireOwner' => $bankwireOwner,
+                'bankwireCustomText' => $bankwireCustomText,
                 'status' => 'ok',
                 'reference' => $params['order']->reference,
                 'contact_url' => $this->context->link->getPageLink('contact', true)
