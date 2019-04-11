@@ -32,6 +32,11 @@ if (!defined('_PS_VERSION_')) {
 
 class Ps_Wirepayment extends PaymentModule
 {
+    /**
+     * @var string Name of the module running on PS 1.6.x. Used for data migration.
+     */
+    const PS_16_EQUIVALENT_MODULE = 'bankwire';
+
     const FLAG_DISPLAY_PAYMENT_INVITE = 'BANK_WIRE_PAYMENT_INVITE';
 
     protected $_html = '';
@@ -91,11 +96,33 @@ class Ps_Wirepayment extends PaymentModule
 
     public function install()
     {
+        $this->uninstallPrestaShop16Module();
+
         Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE, true);
         if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions')) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Migrate data from 1.6 equivalent module (if applicable), then uninstall
+     */
+    public function uninstallPrestaShop16Module()
+    {
+        if (!Module::isInstalled(self::PS_16_EQUIVALENT_MODULE)) {
+            return;
+        }
+        $oldModule = Module::getInstanceByName(self::PS_16_EQUIVALENT_MODULE);
+        if ($oldModule) {
+            // This closure calls the parent class to prevent data to be erased
+            // It allows the new module to be configured without migration
+            $parentUninstallClosure = function() {
+                return parent::uninstall();
+            };
+            $parentUninstallClosure = $parentUninstallClosure->bindTo($oldModule, get_class($oldModule));
+            $parentUninstallClosure();
+        }
     }
 
     public function uninstall()
