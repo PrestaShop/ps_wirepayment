@@ -92,7 +92,8 @@ class Ps_Wirepayment extends PaymentModule
     public function install()
     {
         Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE, true);
-        if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions')) {
+        if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions') ||
+        !$this->registerHook('actionGetExtraMailTemplateVars')) {
             return false;
         }
         return true;
@@ -440,6 +441,23 @@ class Ps_Wirepayment extends PaymentModule
             'bankwireOwner' => $bankwireOwner,
             'bankwireReservationDays' => (int)$bankwireReservationDays,
             'bankwireCustomText' => $bankwireCustomText,
+        );
+    }
+
+    public function hookActionGetExtraMailTemplateVars($params)
+    {
+        if ($params['template']!='bankwire') {
+            return;
+        }
+
+        if (array_key_exists('{bankwire_owner}', $params['template_vars'])) {
+            return;
+        }
+        
+        $params['extra_template_vars'] = array(
+            '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
+            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
+            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS'))
         );
     }
 }
