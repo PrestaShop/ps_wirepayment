@@ -92,11 +92,11 @@ class Ps_Wirepayment extends PaymentModule
     public function install()
     {
         Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE, true);
-        if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions') ||
-        !$this->registerHook('actionGetExtraMailTemplateVars')) {
-            return false;
-        }
-        return true;
+        
+        return parent::install() &&
+                $this->registerHook('paymentReturn') &&
+                $this->registerHook('paymentOptions') &&
+                $this->registerHook('actionGetExtraMailTemplateVars');
     }
 
     public function uninstall()
@@ -122,8 +122,10 @@ class Ps_Wirepayment extends PaymentModule
     protected function _postValidation()
     {
         if (Tools::isSubmit('btnSubmit')) {
-            Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
-                Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE));
+            Configuration::updateValue(
+                self::FLAG_DISPLAY_PAYMENT_INVITE,
+                Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE)
+            );
 
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
                 $this->_postErrors[] = $this->trans('Account details are required.', array(), 'Modules.Wirepayment.Admin');
@@ -396,8 +398,10 @@ class Ps_Wirepayment extends PaymentModule
             'BANK_WIRE_ADDRESS' => Tools::getValue('BANK_WIRE_ADDRESS', Configuration::get('BANK_WIRE_ADDRESS')),
             'BANK_WIRE_RESERVATION_DAYS' => Tools::getValue('BANK_WIRE_RESERVATION_DAYS', Configuration::get('BANK_WIRE_RESERVATION_DAYS')),
             'BANK_WIRE_CUSTOM_TEXT' => $custom_text,
-            self::FLAG_DISPLAY_PAYMENT_INVITE => Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
-                Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE))
+            self::FLAG_DISPLAY_PAYMENT_INVITE => Tools::getValue(
+                self::FLAG_DISPLAY_PAYMENT_INVITE,
+                Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE)
+            )
         );
     }
 
@@ -409,7 +413,7 @@ class Ps_Wirepayment extends PaymentModule
             Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
         );
 
-         $bankwireOwner = $this->owner;
+        $bankwireOwner = $this->owner;
         if (!$bankwireOwner) {
             $bankwireOwner = '___________';
         }
@@ -444,20 +448,22 @@ class Ps_Wirepayment extends PaymentModule
         );
     }
 
-    public function hookActionGetExtraMailTemplateVars($params)
+    public function hookActionGetExtraMailTemplateVars(array $params)
     {
-        if ($params['template']!='bankwire') {
+        if ($params['template'] !== 'bankwire') {
             return;
         }
 
-        if (array_key_exists('{bankwire_owner}', $params['template_vars'])) {
+        if (array_key_exists('{bankwire_owner}', $params['template_vars']) &&
+                array_key_exists('{bankwire_details}', $params['template_vars']) &&
+                array_key_exists('{bankwire_address}', $params['template_vars'])) {
             return;
         }
         
-        $params['extra_template_vars'] = array(
-            '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
-            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
-            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS'))
-        );
+        $params['extra_template_vars']['{bankwire_owner}'] = Configuration::get('BANK_WIRE_OWNER');
+        $params['extra_template_vars']['{bankwire_details}'] =
+                Tools::nl2br(Configuration::get('BANK_WIRE_DETAILS'));
+        $params['extra_template_vars']['{bankwire_address}'] =
+                Tools::nl2br(Configuration::get('BANK_WIRE_ADDRESS'));
     }
 }
