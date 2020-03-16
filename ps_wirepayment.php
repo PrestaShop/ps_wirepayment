@@ -424,7 +424,7 @@ class Ps_Wirepayment extends PaymentModule
         }
 
         $bankwireReservationDays = Configuration::get('BANK_WIRE_RESERVATION_DAYS');
-        if ($bankwireReservationDays === false || $bankwireReservationDays === null) {
+        if (empty($bankwireReservationDays)) {
             // When the value is not set, we set it to 7 days by default
             $bankwireReservationDays = 7;
         }
