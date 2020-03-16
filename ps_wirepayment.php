@@ -55,12 +55,8 @@ class Ps_Wirepayment extends PaymentModule
 
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
-        
-
         $this->bootstrap = true;
         parent::__construct();
-
-        
         $config = Configuration::getMultiple(array(
             'BANK_WIRE_DETAILS',
             'BANK_WIRE_OWNER',
@@ -81,7 +77,7 @@ class Ps_Wirepayment extends PaymentModule
             $this->reservation_days = $config['BANK_WIRE_RESERVATION_DAYS'];
         }
 
-        $config['BANK_WIRE_CUSTOM_TEXT']=Configuration::get('BANK_WIRE_CUSTOM_TEXT', $this->context->language->id);
+        $config['BANK_WIRE_CUSTOM_TEXT'] = Configuration::get('BANK_WIRE_CUSTOM_TEXT', $this->context->language->id);
         if (!empty($config['BANK_WIRE_CUSTOM_TEXT'])) {
             $this->custom_text = $config['BANK_WIRE_CUSTOM_TEXT'];
         }
