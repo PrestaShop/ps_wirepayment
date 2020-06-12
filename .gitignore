@@ -1,2 +1,3 @@
 config_*.xml
-/translations/
+/translations
+/vendor
