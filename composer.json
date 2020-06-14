@@ -15,5 +15,8 @@
   "config": {
     "preferred-install": "dist"
   },
-  "type": "prestashop-module"
+  "type": "prestashop-module",
+  "require-dev": {
+    "prestashop/php-dev-tools": "^3.4"
+  }
 }
