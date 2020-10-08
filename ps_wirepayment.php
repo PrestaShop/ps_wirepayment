@@ -335,12 +335,12 @@ class Ps_Wirepayment extends PaymentModule
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->trans('Enabled', array(), 'Admin.Global'),
+                                'label' => $this->trans('Yes', array(), 'Admin.Global'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->trans('Disabled', array(), 'Admin.Global'),
+                                'label' => $this->trans('No', array(), 'Admin.Global'),
                             )
                         ),
                     ),
