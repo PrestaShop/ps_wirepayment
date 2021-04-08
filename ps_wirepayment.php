@@ -72,7 +72,7 @@ class Ps_Wirepayment extends PaymentModule
         if ((!isset($this->owner) || !isset($this->details) || !isset($this->address)) && 1 == $this->active) {
             $this->warning = $this->trans('Account owner and account details must be configured before using this module.', array(), 'Modules.Wirepayment.Admin');
         }
-        if (!count(Currency::checkPaymentCurrencies($this->id))) {
+        if (!count(Currency::checkPaymentCurrencies($this->id)) && 1 == $this->active) {
             $this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.Wirepayment.Admin');
         }
 
