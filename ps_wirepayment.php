@@ -69,10 +69,10 @@ class Ps_Wirepayment extends PaymentModule
         $this->displayName = $this->trans('Wire payment', array(), 'Modules.Wirepayment.Admin');
         $this->description = $this->trans('Accept wire payments by displaying your account details during the checkout.', array(), 'Modules.Wirepayment.Admin');
         $this->confirmUninstall = $this->trans('Are you sure about removing these details?', array(), 'Modules.Wirepayment.Admin');
-        if (!isset($this->owner) || !isset($this->details) || !isset($this->address)) {
+        if ((!isset($this->owner) || !isset($this->details) || !isset($this->address)) && $this->active) {
             $this->warning = $this->trans('Account owner and account details must be configured before using this module.', array(), 'Modules.Wirepayment.Admin');
         }
-        if (!count(Currency::checkPaymentCurrencies($this->id))) {
+        if (!count(Currency::checkPaymentCurrencies($this->id)) && $this->active) {
             $this->warning = $this->trans('No currency has been set for this module.', array(), 'Modules.Wirepayment.Admin');
         }
 
