@@ -1,3 +1,4 @@
 config_*.xml
 /translations
 /vendor
+.php_cs.cache
