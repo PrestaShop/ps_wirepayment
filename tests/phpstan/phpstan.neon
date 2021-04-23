@@ -1,0 +1,18 @@
+includes:
+	- %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+
+parameters:
+  paths:
+    # From PHPStan 0.12, paths to check are relative to the neon file
+    - ../../payment.php
+    - ../../ps_wirepayment.php
+    - ../../validation.php
+    - ../../controllers/
+    - ../../translations/
+    - ../../views/
+  reportUnmatchedIgnoredErrors: false
+  level: 5
+  ignoreErrors:
+    - '#Call to function is_array\(\) with Currency\|false will always evaluate to false\.$#'
+    - '#Parameter \#7 \$currency_special of method PaymentModuleCore::validateOrder\(\) expects null, int given\.$#'
+    - '#Parameter \#9 \$secure_key of method PaymentModuleCore::validateOrder\(\) expects bool, string given\.$#'
