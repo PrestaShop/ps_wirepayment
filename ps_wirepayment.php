@@ -236,10 +236,9 @@ class Ps_Wirepayment extends PaymentModule
             $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
             $this->smarty->assign([
                 'shop_name' => $this->context->shop->name,
-                'total' => Tools::displayPrice(
+                'total' => $this->context->getCurrentLocale()->formatPrice(
                     $totalToPaid,
-                    new Currency($params['order']->id_currency),
-                    false
+                    (new Currency($params['order']->id_currency))->iso_code
                 ),
                 'bankwireDetails' => $bankwireDetails,
                 'bankwireAddress' => $bankwireAddress,
@@ -406,7 +405,7 @@ class Ps_Wirepayment extends PaymentModule
         $cart = $this->context->cart;
         $total = sprintf(
             $this->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
-            Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
+            $this->context->getCurrentLocale()->formatPrice($cart->getOrderTotal(true, Cart::BOTH), $this->context->currency->iso_code)
         );
 
         $bankwireOwner = $this->owner;
