@@ -1,8 +1,0 @@
-includes:
-	- %currentWorkingDirectory%/tests/phpstan/phpstan.neon
-
-parameters:
-	ignoreErrors:
-		- '#Call to function is_array\(\) with Currency will always evaluate to false\.$#'
-		- '#Parameter \#1 \$id of class Customer constructor expects null, int given\.$#'
-		- '#Parameter \#4 \$ssl of method LinkCore::getModuleLink\(\) expects null, true given\.$#'
