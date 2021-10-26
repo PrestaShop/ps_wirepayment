@@ -41,7 +41,7 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
 
         $total = sprintf(
             $this->getTranslator()->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
-            Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
+            $this->context->getCurrentLocale()->formatPrice($cart->getOrderTotal(true, Cart::BOTH), $this->context->currency->iso_code)
         );
 
         $this->context->smarty->assign([

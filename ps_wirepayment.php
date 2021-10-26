@@ -49,7 +49,7 @@ class Ps_Wirepayment extends PaymentModule
         $this->name = 'ps_wirepayment';
         $this->tab = 'payments_gateways';
         $this->version = '2.1.0';
-        $this->ps_versions_compliancy = ['min' => '1.7.1.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
         $this->author = 'PrestaShop';
         $this->controllers = ['payment', 'validation'];
         $this->is_eu_compatible = 1;
@@ -236,10 +236,9 @@ class Ps_Wirepayment extends PaymentModule
             $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
             $this->smarty->assign([
                 'shop_name' => $this->context->shop->name,
-                'total' => Tools::displayPrice(
+                'total' => $this->context->getCurrentLocale()->formatPrice(
                     $totalToPaid,
-                    new Currency($params['order']->id_currency),
-                    false
+                    (new Currency($params['order']->id_currency))->iso_code
                 ),
                 'bankwireDetails' => $bankwireDetails,
                 'bankwireAddress' => $bankwireAddress,
@@ -406,7 +405,7 @@ class Ps_Wirepayment extends PaymentModule
         $cart = $this->context->cart;
         $total = sprintf(
             $this->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
-            Tools::displayPrice($cart->getOrderTotal(true, Cart::BOTH))
+            $this->context->getCurrentLocale()->formatPrice($cart->getOrderTotal(true, Cart::BOTH), $this->context->currency->iso_code)
         );
 
         $bankwireOwner = $this->owner;
