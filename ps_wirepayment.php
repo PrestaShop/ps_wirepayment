@@ -48,7 +48,7 @@ class Ps_Wirepayment extends PaymentModule
     {
         $this->name = 'ps_wirepayment';
         $this->tab = 'payments_gateways';
-        $this->version = '2.1.0';
+        $this->version = '2.1.1';
         $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
         $this->author = 'PrestaShop';
         $this->controllers = ['payment', 'validation'];
@@ -94,7 +94,10 @@ class Ps_Wirepayment extends PaymentModule
     public function install()
     {
         Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE, true);
-        if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions')) {
+        if (!parent::install()
+            || !$this->registerHook('displayPaymentReturn')
+            || !$this->registerHook('paymentOptions')
+        ) {
             return false;
         }
 
