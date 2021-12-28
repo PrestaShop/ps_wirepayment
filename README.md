@@ -2,7 +2,7 @@
 
 ## About
 
-Accept payments for your products via bank wire transfer.
+Accept wire payments by displaying your account details during the checkout.
 
 ## Multistore compatibility
 

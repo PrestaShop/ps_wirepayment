@@ -25,7 +25,7 @@
 /* SSL Management */
 $useSSL = true;
 
-require('../../config/config.inc.php');
+require '../../config/config.inc.php';
 Tools::displayFileAsDeprecated();
 
 // init front controller in order to use Tools::redirect

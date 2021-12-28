@@ -21,38 +21,41 @@
 /**
  * @deprecated 1.5.0 This file is deprecated, use moduleFrontController instead
  */
-
-include(__DIR__.'/../../config/config.inc.php');
-include(__DIR__.'/../../header.php');
-include(__DIR__.'/../../init.php');
+include __DIR__ . '/../../config/config.inc.php';
+include __DIR__ . '/../../header.php';
+include __DIR__ . '/../../init.php';
 
 $context = Context::getContext();
 $cart = $context->cart;
+/** @var Ps_Wirepayment $bankwire */
 $bankwire = Module::getInstanceByName('ps_wirepayment');
 
-if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$bankwire->active)
-	Tools::redirect('index.php?controller=order&step=1');
+if ($cart->id_customer == 0 or $cart->id_address_delivery == 0 or $cart->id_address_invoice == 0 or !$bankwire->active) {
+    Tools::redirect('index.php?controller=order&step=1');
+}
 
 // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
 $authorized = false;
-foreach (Module::getPaymentModules() as $module)
-	if ($module['name'] == 'ps_wirepayment')
-	{
-		$authorized = true;
-		break;
-	}
-if (!$authorized)
-	die($bankwire->getTranslator()->trans('This payment method is not available.', array(), 'Modules.Wirepayment.Shop'));
+foreach (Module::getPaymentModules() as $module) {
+    if ($module['name'] == 'ps_wirepayment') {
+        $authorized = true;
+        break;
+    }
+}
+if (!$authorized) {
+    exit($bankwire->getTranslator()->trans('This payment method is not available.', [], 'Modules.Wirepayment.Shop'));
+}
 
-$customer = new Customer((int)$cart->id_customer);
+$customer = new Customer((int) $cart->id_customer);
 
-if (!Validate::isLoadedObject($customer))
-	Tools::redirect('index.php?controller=order&step=1');
+if (!Validate::isLoadedObject($customer)) {
+    Tools::redirect('index.php?controller=order&step=1');
+}
 
 $currency = $context->currency;
-$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
+$total = (float) ($cart->getOrderTotal(true, Cart::BOTH));
 
-$bankwire->validateOrder($cart->id, Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, NULL, array(), (int)$currency->id, false, $customer->secure_key);
+$bankwire->validateOrder($cart->id, (int) Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, null, [], (int) $currency->id, false, $customer->secure_key);
 
 $order = new Order($bankwire->currentOrder);
-Tools::redirect('index.php?controller=order-confirmation&id_cart='.$cart->id.'&id_module='.$bankwire->id.'&id_order='.$bankwire->currentOrder.'&key='.$customer->secure_key);
+Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $bankwire->id . '&id_order=' . $bankwire->currentOrder . '&key=' . $customer->secure_key);
