@@ -9,10 +9,6 @@ parameters:
     - ../../validation.php
     - ../../controllers/
     - ../../translations/
+    - ../../upgrade/
     - ../../views/
-  reportUnmatchedIgnoredErrors: false
   level: 5
-  ignoreErrors:
-    - '#Call to function is_array\(\) with Currency\|false will always evaluate to false\.$#'
-    - '#Parameter \#7 \$currency_special of method PaymentModuleCore::validateOrder\(\) expects null, int given\.$#'
-    - '#Parameter \#9 \$secure_key of method PaymentModuleCore::validateOrder\(\) expects bool, string given\.$#'
