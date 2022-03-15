@@ -211,53 +211,35 @@ class Ps_Wirepayment extends PaymentModule
             return;
         }
 
-        $state = $params['order']->getCurrentState();
-        if (
-            in_array(
-                $state,
-                [
-                    Configuration::get('PS_OS_BANKWIRE'),
-                    Configuration::get('PS_OS_OUTOFSTOCK'),
-                    Configuration::get('PS_OS_OUTOFSTOCK_UNPAID'),
-                ]
-        )) {
-            $bankwireOwner = $this->owner;
-            if (!$bankwireOwner) {
-                $bankwireOwner = '___________';
-            }
-
-            $bankwireDetails = Tools::nl2br($this->details);
-            if (!$bankwireDetails) {
-                $bankwireDetails = '___________';
-            }
-
-            $bankwireAddress = Tools::nl2br($this->address);
-            if (!$bankwireAddress) {
-                $bankwireAddress = '___________';
-            }
-
-            $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
-            $this->smarty->assign([
-                'shop_name' => $this->context->shop->name,
-                'total' => $this->context->getCurrentLocale()->formatPrice(
-                    $totalToPaid,
-                    (new Currency($params['order']->id_currency))->iso_code
-                ),
-                'bankwireDetails' => $bankwireDetails,
-                'bankwireAddress' => $bankwireAddress,
-                'bankwireOwner' => $bankwireOwner,
-                'status' => 'ok',
-                'reference' => $params['order']->reference,
-                'contact_url' => $this->context->link->getPageLink('contact', true),
-            ]);
-        } else {
-            $this->smarty->assign(
-                [
-                    'status' => 'failed',
-                    'contact_url' => $this->context->link->getPageLink('contact', true),
-                ]
-            );
+        $bankwireOwner = $this->owner;
+        if (!$bankwireOwner) {
+            $bankwireOwner = '___________';
         }
+
+        $bankwireDetails = Tools::nl2br($this->details);
+        if (!$bankwireDetails) {
+            $bankwireDetails = '___________';
+        }
+
+        $bankwireAddress = Tools::nl2br($this->address);
+        if (!$bankwireAddress) {
+            $bankwireAddress = '___________';
+        }
+
+        $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
+        $this->smarty->assign([
+            'shop_name' => $this->context->shop->name,
+            'total' => $this->context->getCurrentLocale()->formatPrice(
+                $totalToPaid,
+                (new Currency($params['order']->id_currency))->iso_code
+            ),
+            'bankwireDetails' => $bankwireDetails,
+            'bankwireAddress' => $bankwireAddress,
+            'bankwireOwner' => $bankwireOwner,
+            'status' => 'ok',
+            'reference' => $params['order']->reference,
+            'contact_url' => $this->context->link->getPageLink('contact', true),
+        ]);
 
         return $this->fetch('module:ps_wirepayment/views/templates/hook/payment_return.tpl');
     }
