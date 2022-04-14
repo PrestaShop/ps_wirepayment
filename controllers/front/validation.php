@@ -56,8 +56,8 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
         $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
         $mailVars = [
             '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
-            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
-            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS')),
+            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS') ?: ''),
+            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS') ?: ''),
         ];
 
         $this->module->validateOrder($cart->id, (int) Configuration::get('PS_OS_BANKWIRE'), $total, $this->module->displayName, null, $mailVars, (int) $currency->id, false, $customer->secure_key);
