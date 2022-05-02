@@ -86,8 +86,8 @@ class Ps_Wirepayment extends PaymentModule
 
         $this->extra_mail_vars = [
             '{bankwire_owner}' => $this->owner,
-            '{bankwire_details}' => nl2br($this->details),
-            '{bankwire_address}' => nl2br($this->address),
+            '{bankwire_details}' => nl2br($this->details ?: ''),
+            '{bankwire_address}' => nl2br($this->address ?: ''),
         ];
     }
 
