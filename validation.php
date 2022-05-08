@@ -27,23 +27,23 @@ include __DIR__ . '/../../init.php';
 
 $context = Context::getContext();
 $cart = $context->cart;
-/** @var Ps_Wirepayment $bankwire */
-$bankwire = Module::getInstanceByName('ps_wirepayment');
+/** @var PixPayment $pix */
+$pix = Module::getInstanceByName('pixpayment');
 
-if ($cart->id_customer == 0 or $cart->id_address_delivery == 0 or $cart->id_address_invoice == 0 or !$bankwire->active) {
+if ($cart->id_customer == 0 or $cart->id_address_delivery == 0 or $cart->id_address_invoice == 0 or !$pix->active) {
     Tools::redirect('index.php?controller=order&step=1');
 }
 
 // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
 $authorized = false;
 foreach (Module::getPaymentModules() as $module) {
-    if ($module['name'] == 'ps_wirepayment') {
+    if ($module['name'] == 'pixpayment') {
         $authorized = true;
         break;
     }
 }
 if (!$authorized) {
-    exit($bankwire->getTranslator()->trans('This payment method is not available.', [], 'Modules.Wirepayment.Shop'));
+    exit($pix->getTranslator()->trans('Este método de pagamento não está disponível', [], 'Modules.PixPayment.Shop'));
 }
 
 $customer = new Customer((int) $cart->id_customer);
@@ -55,7 +55,7 @@ if (!Validate::isLoadedObject($customer)) {
 $currency = $context->currency;
 $total = (float) ($cart->getOrderTotal(true, Cart::BOTH));
 
-$bankwire->validateOrder($cart->id, (int) Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, null, [], (int) $currency->id, false, $customer->secure_key);
+$pix->validateOrder($cart->id, (int) Configuration::get('PS_OS_PIX'), $total, $pix->displayName, null, [], (int) $currency->id, false, $customer->secure_key);
 
-$order = new Order($bankwire->currentOrder);
-Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $bankwire->id . '&id_order=' . $bankwire->currentOrder . '&key=' . $customer->secure_key);
+$order = new Order($pix->currentOrder);
+Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $pix->id . '&id_order=' . $pix->currentOrder . '&key=' . $customer->secure_key);
