@@ -1,8 +1,8 @@
-# Wire payment
+# PIX Payment (payment system from Brazil Central Bank)
 
 ## About
 
-Accept wire payments by displaying your account details during the checkout.
+Accept PIX payments by displaying your PIX Key during the checkout.
 
 ## Multistore compatibility
 
@@ -13,7 +13,7 @@ It can be activated on one store and deactivated on another
 
 ## Reporting issues
 
-You can report issues with this module in the main PrestaShop repository. [Click here to report an issue][report-issue]. 
+You can report issues with this module in this repository. [Click here to report an issue][report-issue]. 
 
 ## Contributing
 
