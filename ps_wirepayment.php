@@ -24,16 +24,15 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Ps_Wirepayment extends PaymentModule
+class PixPayment extends PaymentModule
 {
-    const FLAG_DISPLAY_PAYMENT_INVITE = 'BANK_WIRE_PAYMENT_INVITE';
+    const FLAG_DISPLAY_PAYMENT_INVITE = 'PIX_PAYMENT_INVITE';
 
     protected $_html = '';
     protected $_postErrors = [];
 
-    public $details;
+    public $key;
     public $owner;
-    public $address;
     public $extra_mail_vars;
     /**
      * @var int
@@ -46,48 +45,41 @@ class Ps_Wirepayment extends PaymentModule
 
     public function __construct()
     {
-        $this->name = 'ps_wirepayment';
+        $this->name = 'pixpayment';
         $this->tab = 'payments_gateways';
-        $this->version = '2.1.3';
+        $this->version = '2.1.1';
         $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
-        $this->author = 'PrestaShop';
+        $this->author = 'PrestaShop & Matheus Bach';
         $this->controllers = ['payment', 'validation'];
         $this->is_eu_compatible = 1;
 
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
 
-        $config = Configuration::getMultiple(['BANK_WIRE_DETAILS', 'BANK_WIRE_OWNER', 'BANK_WIRE_ADDRESS', 'BANK_WIRE_RESERVATION_DAYS']);
-        if (!empty($config['BANK_WIRE_OWNER'])) {
-            $this->owner = $config['BANK_WIRE_OWNER'];
+        $config = Configuration::getMultiple(['PIX_KEY', 'PIX_OWNER', 'PIX_RESERVATION_DAYS']);
+        if (!empty($config['PIX_OWNER'])) {
+            $this->owner = $config['PIX_OWNER'];
         }
-        if (!empty($config['BANK_WIRE_DETAILS'])) {
-            $this->details = $config['BANK_WIRE_DETAILS'];
+        if (!empty($config['PIX_KEY'])) {
+            $this->key = $config['PIX_KEY'];
         }
-        if (!empty($config['BANK_WIRE_ADDRESS'])) {
-            $this->address = $config['BANK_WIRE_ADDRESS'];
-        }
-        if (!empty($config['BANK_WIRE_RESERVATION_DAYS'])) {
-            $this->reservation_days = $config['BANK_WIRE_RESERVATION_DAYS'];
+        if (!empty($config['PIX_RESERVATION_DAYS'])) {
+            $this->reservation_days = $config['PIX_RESERVATION_DAYS'];
         }
 
         $this->bootstrap = true;
         parent::__construct();
 
-        $this->displayName = $this->trans('Wire payment', [], 'Modules.Wirepayment.Admin');
-        $this->description = $this->trans('Accept wire payments by displaying your account details during the checkout.', [], 'Modules.Wirepayment.Admin');
-        $this->confirmUninstall = $this->trans('Are you sure about removing these details?', [], 'Modules.Wirepayment.Admin');
-        if ((!isset($this->owner) || !isset($this->details) || !isset($this->address)) && $this->active) {
-            $this->warning = $this->trans('Account owner and account details must be configured before using this module.', [], 'Modules.Wirepayment.Admin');
-        }
+        $this->displayName = $this->trans('Pagamento PIX', [], 'Modules.PixPayment.Admin');
+        $this->description = $this->trans('Aceite pagamentos PIX exibindo suas informações de pagamento durante o checkout.', [], 'Modules.PixPayment.Admin');
+        $this->confirmUninstall = $this->trans('Tem certeza que quer remover?', [], 'Modules.PixPayment.Admin');
         if (!count(Currency::checkPaymentCurrencies($this->id)) && $this->active) {
-            $this->warning = $this->trans('No currency has been set for this module.', [], 'Modules.Wirepayment.Admin');
+            $this->warning = $this->trans('Nenhuma moeda definida para este módulo.', [], 'Modules.PixPayment.Admin');
         }
 
         $this->extra_mail_vars = [
-            '{bankwire_owner}' => $this->owner,
-            '{bankwire_details}' => nl2br($this->details ?: ''),
-            '{bankwire_address}' => nl2br($this->address ?: ''),
+            '{pix_owner}' => $this->owner,
+            '{pix_key}' => nl2br($this->key),
         ];
     }
 
@@ -106,11 +98,10 @@ class Ps_Wirepayment extends PaymentModule
 
     public function uninstall()
     {
-        if (!Configuration::deleteByName('BANK_WIRE_CUSTOM_TEXT')
-                || !Configuration::deleteByName('BANK_WIRE_DETAILS')
-                || !Configuration::deleteByName('BANK_WIRE_OWNER')
-                || !Configuration::deleteByName('BANK_WIRE_ADDRESS')
-                || !Configuration::deleteByName('BANK_WIRE_RESERVATION_DAYS')
+        if (!Configuration::deleteByName('PIX_CUSTOM_TEXT')
+                || !Configuration::deleteByName('PIX_KEY')
+                || !Configuration::deleteByName('PIX_OWNER')
+                || !Configuration::deleteByName('PIX_RESERVATION_DAYS')
                 || !Configuration::deleteByName(self::FLAG_DISPLAY_PAYMENT_INVITE)
                 || !parent::uninstall()) {
             return false;
@@ -125,10 +116,10 @@ class Ps_Wirepayment extends PaymentModule
             Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
                 Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE));
 
-            if (!Tools::getValue('BANK_WIRE_DETAILS')) {
-                $this->_postErrors[] = $this->trans('Account details are required.', [], 'Modules.Wirepayment.Admin');
-            } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
-                $this->_postErrors[] = $this->trans('Account owner is required.', [], 'Modules.Wirepayment.Admin');
+            if (!Tools::getValue('PIX_KEY')) {
+                $this->_postErrors[] = $this->trans('Chave PIX é obrigatória', [], 'Modules.PixPayment.Admin');
+            } elseif (!Tools::getValue('PIX_OWNER')) {
+                $this->_postErrors[] = $this->trans('Dono de conta é obrigatório.', [], 'Modules.PixPayment.Admin');
             }
         }
     }
@@ -136,24 +127,23 @@ class Ps_Wirepayment extends PaymentModule
     protected function _postProcess()
     {
         if (Tools::isSubmit('btnSubmit')) {
-            Configuration::updateValue('BANK_WIRE_DETAILS', Tools::getValue('BANK_WIRE_DETAILS'));
-            Configuration::updateValue('BANK_WIRE_OWNER', Tools::getValue('BANK_WIRE_OWNER'));
-            Configuration::updateValue('BANK_WIRE_ADDRESS', Tools::getValue('BANK_WIRE_ADDRESS'));
+            Configuration::updateValue('PIX_KEY', Tools::getValue('PIX_KEY'));
+            Configuration::updateValue('PIX_OWNER', Tools::getValue('PIX_OWNER'));
 
             $custom_text = [];
             $languages = Language::getLanguages(false);
             foreach ($languages as $lang) {
-                if (Tools::getIsset('BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang'])) {
-                    $custom_text[$lang['id_lang']] = Tools::getValue('BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang']);
+                if (Tools::getIsset('PIX_CUSTOM_TEXT_' . $lang['id_lang'])) {
+                    $custom_text[$lang['id_lang']] = Tools::getValue('PIX_CUSTOM_TEXT_' . $lang['id_lang']);
                 }
             }
-            Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
-            Configuration::updateValue('BANK_WIRE_CUSTOM_TEXT', $custom_text);
+            Configuration::updateValue('PIX_RESERVATION_DAYS', Tools::getValue('PIX_RESERVATION_DAYS'));
+            Configuration::updateValue('PIX_CUSTOM_TEXT', $custom_text);
         }
         $this->_html .= $this->displayConfirmation($this->trans('Settings updated', [], 'Admin.Global'));
     }
 
-    protected function _displayBankWire()
+    protected function _displayPixWire()
     {
         return $this->display(__FILE__, 'infos.tpl');
     }
@@ -173,7 +163,7 @@ class Ps_Wirepayment extends PaymentModule
             $this->_html .= '<br />';
         }
 
-        $this->_html .= $this->_displayBankWire();
+        $this->_html .= $this->_displayPixWire();
         $this->_html .= $this->renderForm();
 
         return $this->_html;
@@ -195,9 +185,9 @@ class Ps_Wirepayment extends PaymentModule
 
         $newOption = new PaymentOption();
         $newOption->setModuleName($this->name)
-                ->setCallToActionText($this->trans('Pay by bank wire', [], 'Modules.Wirepayment.Shop'))
+                ->setCallToActionText($this->trans('Pague usando PIX', [], 'Modules.PixPayment.Shop'))
                 ->setAction($this->context->link->getModuleLink($this->name, 'validation', [], true))
-                ->setAdditionalInformation($this->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
+                ->setAdditionalInformation($this->fetch('module:pixpayment/views/templates/hook/pixpayment_intro.tpl'));
         $payment_options = [
             $newOption,
         ];
@@ -205,43 +195,55 @@ class Ps_Wirepayment extends PaymentModule
         return $payment_options;
     }
 
-    public function hookDisplayPaymentReturn($params)
+    public function hookPaymentReturn($params)
     {
         if (!$this->active || !Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE)) {
             return;
         }
 
-        $bankwireOwner = $this->owner;
-        if (!$bankwireOwner) {
-            $bankwireOwner = '___________';
+        $state = $params['order']->getCurrentState();
+        if (
+            in_array(
+                $state,
+                [
+                    Configuration::get('PS_OS_PIXWIRE'),
+                    Configuration::get('PS_OS_OUTOFSTOCK'),
+                    Configuration::get('PS_OS_OUTOFSTOCK_UNPAID'),
+                ]
+        )) {
+            $pixOwner = $this->owner;
+            if (!$pixOwner) {
+                $pixOwner = '___________';
+            }
+
+            $pixKey = Tools::nl2br($this->key);
+            if (!$pixKey) {
+                $pixKey = '___________';
+            }
+
+            $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
+            $this->smarty->assign([
+                'shop_name' => $this->context->shop->name,
+                'total' => $this->context->getCurrentLocale()->formatPrice(
+                    $totalToPaid,
+                    (new Currency($params['order']->id_currency))->iso_code
+                ),
+                'pixKey' => $pixKey,
+                'pixOwner' => $pixOwner,
+                'status' => 'ok',
+                'reference' => $params['order']->reference,
+                'contact_url' => $this->context->link->getPageLink('contact', true),
+            ]);
+        } else {
+            $this->smarty->assign(
+                [
+                    'status' => 'failed',
+                    'contact_url' => $this->context->link->getPageLink('contact', true),
+                ]
+            );
         }
 
-        $bankwireDetails = Tools::nl2br($this->details);
-        if (!$bankwireDetails) {
-            $bankwireDetails = '___________';
-        }
-
-        $bankwireAddress = Tools::nl2br($this->address);
-        if (!$bankwireAddress) {
-            $bankwireAddress = '___________';
-        }
-
-        $totalToPaid = $params['order']->getOrdersTotalPaid() - $params['order']->getTotalPaid();
-        $this->smarty->assign([
-            'shop_name' => $this->context->shop->name,
-            'total' => $this->context->getCurrentLocale()->formatPrice(
-                $totalToPaid,
-                (new Currency($params['order']->id_currency))->iso_code
-            ),
-            'bankwireDetails' => $bankwireDetails,
-            'bankwireAddress' => $bankwireAddress,
-            'bankwireOwner' => $bankwireOwner,
-            'status' => 'ok',
-            'reference' => $params['order']->reference,
-            'contact_url' => $this->context->link->getPageLink('contact', true),
-        ]);
-
-        return $this->fetch('module:ps_wirepayment/views/templates/hook/payment_return.tpl');
+        return $this->fetch('module:pixpayment/views/templates/hook/payment_return.tpl');
     }
 
     public function checkCurrency($cart)
@@ -265,27 +267,22 @@ class Ps_Wirepayment extends PaymentModule
         $fields_form = [
             'form' => [
                 'legend' => [
-                    'title' => $this->trans('Account details', [], 'Modules.Wirepayment.Admin'),
+                    'title' => $this->trans('Detalhes da Conta', [], 'Modules.PixPayment.Admin'),
                     'icon' => 'icon-envelope',
                 ],
                 'input' => [
                     [
                         'type' => 'text',
-                        'label' => $this->trans('Account owner', [], 'Modules.Wirepayment.Admin'),
-                        'name' => 'BANK_WIRE_OWNER',
+                        'label' => $this->trans('Dono da Conta', [], 'Modules.PixPayment.Admin'),
+                        'name' => 'PIX_OWNER',
+                        'desc' => $this->trans('Coloque aqui seu nome. Ex: Thomas Turbando', [], 'Modules.PixPayment.Admin'),
                         'required' => true,
                     ],
                     [
                         'type' => 'textarea',
-                        'label' => $this->trans('Account details', [], 'Modules.Wirepayment.Admin'),
-                        'name' => 'BANK_WIRE_DETAILS',
-                        'desc' => $this->trans('Such as bank branch, IBAN number, BIC, etc.', [], 'Modules.Wirepayment.Admin'),
-                        'required' => true,
-                    ],
-                    [
-                        'type' => 'textarea',
-                        'label' => $this->trans('Bank address', [], 'Modules.Wirepayment.Admin'),
-                        'name' => 'BANK_WIRE_ADDRESS',
+                        'label' => $this->trans('Chave PIX', [], 'Modules.PixPayment.Admin'),
+                        'name' => 'PIX_KEY',
+                        'desc' => $this->trans('Sua Chave PIX aqui. Recomendo usar chave aleatória, mas pode ser CPF, CNPJ, telefone ou e-mail', [], 'Modules.PixPayment.Admin'),
                         'required' => true,
                     ],
                 ],
@@ -297,29 +294,29 @@ class Ps_Wirepayment extends PaymentModule
         $fields_form_customization = [
             'form' => [
                 'legend' => [
-                    'title' => $this->trans('Customization', [], 'Modules.Wirepayment.Admin'),
+                    'title' => $this->trans('Customização', [], 'Modules.PixPayment.Admin'),
                     'icon' => 'icon-cogs',
                 ],
                 'input' => [
                     [
                         'type' => 'text',
-                        'label' => $this->trans('Reservation period', [], 'Modules.Wirepayment.Admin'),
-                        'desc' => $this->trans('Number of days the items remain reserved', [], 'Modules.Wirepayment.Admin'),
-                        'name' => 'BANK_WIRE_RESERVATION_DAYS',
+                        'label' => $this->trans('Período de reserva', [], 'Modules.PixPayment.Admin'),
+                        'desc' => $this->trans('Numero de dias que os itens ficarão reservados', [], 'Modules.PixPayment.Admin'),
+                        'name' => 'PIX_RESERVATION_DAYS',
                     ],
                     [
                         'type' => 'textarea',
-                        'label' => $this->trans('Information to the customer', [], 'Modules.Wirepayment.Admin'),
-                        'name' => 'BANK_WIRE_CUSTOM_TEXT',
-                        'desc' => $this->trans('Information on the bank transfer (processing time, starting of the shipping...)', [], 'Modules.Wirepayment.Admin'),
+                        'label' => $this->trans('Informações ao cliente', [], 'Modules.PixPayment.Admin'),
+                        'name' => 'PIX_CUSTOM_TEXT',
+                        'desc' => $this->trans('Informações para enviar ao cliente (Tempo de processamento do pagamento, tempo para começar a enviar o pacote, etc)', [], 'Modules.PixPayment.Admin'),
                         'lang' => true,
                     ],
                     [
                         'type' => 'switch',
-                        'label' => $this->trans('Display the invitation to pay in the order confirmation page', [], 'Modules.Wirepayment.Admin'),
+                        'label' => $this->trans('Mostrar convite para pagar na página de confirmação de checkout', [], 'Modules.PixPayment.Admin'),
                         'name' => self::FLAG_DISPLAY_PAYMENT_INVITE,
                         'is_bool' => true,
-                        'hint' => $this->trans('Your country\'s legislation may require you to send the invitation to pay by email only. Disabling the option will hide the invitation on the confirmation page.', [], 'Modules.Wirepayment.Admin'),
+                        'hint' => $this->trans('Lesgislação de alguns países pedem para enviar somente por e-mail. Se não for o caso, você pode ativar', [], 'Modules.PixPayment.Admin'),
                         'values' => [
                             [
                                 'id' => 'active_on',
@@ -367,17 +364,16 @@ class Ps_Wirepayment extends PaymentModule
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
             $custom_text[$lang['id_lang']] = Tools::getValue(
-                'BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang'],
-                Configuration::get('BANK_WIRE_CUSTOM_TEXT', $lang['id_lang'])
+                'PIX_CUSTOM_TEXT_' . $lang['id_lang'],
+                Configuration::get('PIX_CUSTOM_TEXT', $lang['id_lang'])
             );
         }
 
         return [
-            'BANK_WIRE_DETAILS' => Tools::getValue('BANK_WIRE_DETAILS', $this->details),
-            'BANK_WIRE_OWNER' => Tools::getValue('BANK_WIRE_OWNER', $this->owner),
-            'BANK_WIRE_ADDRESS' => Tools::getValue('BANK_WIRE_ADDRESS', $this->address),
-            'BANK_WIRE_RESERVATION_DAYS' => Tools::getValue('BANK_WIRE_RESERVATION_DAYS', $this->reservation_days),
-            'BANK_WIRE_CUSTOM_TEXT' => $custom_text,
+            'PIX_KEY' => Tools::getValue('PIX_KEY', $this->key),
+            'PIX_OWNER' => Tools::getValue('PIX_OWNER', $this->owner),
+            'PIX_RESERVATION_DAYS' => Tools::getValue('PIX_RESERVATION_DAYS', $this->reservation_days),
+            'PIX_CUSTOM_TEXT' => $custom_text,
             self::FLAG_DISPLAY_PAYMENT_INVITE => Tools::getValue(
                 self::FLAG_DISPLAY_PAYMENT_INVITE,
                 Configuration::get(self::FLAG_DISPLAY_PAYMENT_INVITE)
@@ -389,42 +385,36 @@ class Ps_Wirepayment extends PaymentModule
     {
         $cart = $this->context->cart;
         $total = sprintf(
-            $this->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
+            $this->trans('%1$s (tax incl.)', [], 'Modules.PixPayment.Shop'),
             $this->context->getCurrentLocale()->formatPrice($cart->getOrderTotal(true, Cart::BOTH), $this->context->currency->iso_code)
         );
 
-        $bankwireOwner = $this->owner;
-        if (!$bankwireOwner) {
-            $bankwireOwner = '___________';
+        $pixOwner = $this->owner;
+        if (!$pixOwner) {
+            $pixOwner = '___________';
         }
 
-        $bankwireDetails = Tools::nl2br($this->details);
-        if (!$bankwireDetails) {
-            $bankwireDetails = '___________';
+        $pixKey = Tools::nl2br($this->details);
+        if (!$pixKey) {
+            $pixKey = '___________';
         }
 
-        $bankwireAddress = Tools::nl2br($this->address);
-        if (!$bankwireAddress) {
-            $bankwireAddress = '___________';
+        $pixReservationDays = $this->reservation_days;
+        if (false === $pixReservationDays) {
+            $pixReservationDays = 7;
         }
 
-        $bankwireReservationDays = $this->reservation_days;
-        if (false === $bankwireReservationDays) {
-            $bankwireReservationDays = 7;
-        }
-
-        $bankwireCustomText = Tools::nl2br(Configuration::get('BANK_WIRE_CUSTOM_TEXT', $this->context->language->id));
-        if (empty($bankwireCustomText)) {
-            $bankwireCustomText = '';
+        $pixCustomText = Tools::nl2br(Configuration::get('PIX_CUSTOM_TEXT', $this->context->language->id));
+        if (empty($pixCustomText)) {
+            $pixCustomText = '';
         }
 
         return [
             'total' => $total,
-            'bankwireDetails' => $bankwireDetails,
-            'bankwireAddress' => $bankwireAddress,
-            'bankwireOwner' => $bankwireOwner,
-            'bankwireReservationDays' => (int) $bankwireReservationDays,
-            'bankwireCustomText' => $bankwireCustomText,
+            'pixKey' => $pixKey,
+            'pixOwner' => $pixOwner,
+            'pixReservationDays' => (int) $pixReservationDays,
+            'pixCustomText' => $pixCustomText,
         ];
     }
 }

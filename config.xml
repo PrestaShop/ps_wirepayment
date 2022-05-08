@@ -1,13 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <module>
-	<name>ps_wirepayment</name>
-	<displayName><![CDATA[Wire payment]]></displayName>
-	<version><![CDATA[2.1.3]]></version>
-	<description><![CDATA[Accept payments by bank transfer.]]></description>
-	<author><![CDATA[PrestaShop]]></author>
-	<tab><![CDATA[payments_gateways]]></tab>
-	<confirmUninstall><![CDATA[Are you sure about removing these details?]]></confirmUninstall>
-	<is_configurable>1</is_configurable>
-	<need_instance>1</need_instance>
-	<limited_countries></limited_countries>
+    <name>pixpayment</name>
+    <displayName>
+        <![CDATA[Pagamento PIX]]>
+    </displayName>
+    <version>
+        <![CDATA[2.1.1]]>
+    </version>
+    <description>
+        <![CDATA[Aceite pagamentos via PIX]]>
+    </description>
+    <author>
+        <![CDATA[PrestaShop & Matheus Bach]]>
+    </author>
+    <tab>
+        <![CDATA[payments_gateways]]>
+    </tab>
+    <confirmUninstall>
+        <![CDATA[Tem certeza que quer remover?]]>
+    </confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+    <limited_countries></limited_countries>
 </module>

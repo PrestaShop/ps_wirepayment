@@ -21,9 +21,9 @@
 /**
  * @since 1.5.0
  *
- * @property Ps_Wirepayment $module
+ * @property PixPayment $module
  */
-class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontController
+class PixPaymentValidationModuleFrontController extends ModuleFrontController
 {
     /**
      * @see FrontController::postProcess()
@@ -38,13 +38,13 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
         // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
         $authorized = false;
         foreach (Module::getPaymentModules() as $module) {
-            if ($module['name'] == 'ps_wirepayment') {
+            if ($module['name'] == 'pixpayment') {
                 $authorized = true;
                 break;
             }
         }
         if (!$authorized) {
-            exit($this->module->getTranslator()->trans('This payment method is not available.', [], 'Modules.Wirepayment.Shop'));
+            exit($this->module->getTranslator()->trans('Esse método de pagamento não está disponível.', [], 'Modules.PixPayment.Shop'));
         }
 
         $customer = new Customer($cart->id_customer);
@@ -55,12 +55,11 @@ class Ps_WirepaymentValidationModuleFrontController extends ModuleFrontControlle
         $currency = $this->context->currency;
         $total = (float) $cart->getOrderTotal(true, Cart::BOTH);
         $mailVars = [
-            '{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
-            '{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS') ?: ''),
-            '{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS') ?: ''),
+            '{pix_owner}' => Configuration::get('PIX_OWNER'),
+            '{pix_key}' => nl2br(Configuration::get('PIX_KEY')),
         ];
 
-        $this->module->validateOrder($cart->id, (int) Configuration::get('PS_OS_BANKWIRE'), $total, $this->module->displayName, null, $mailVars, (int) $currency->id, false, $customer->secure_key);
+        $this->module->validateOrder($cart->id, (int) Configuration::get('PS_OS_PIX'), $total, $this->module->displayName, null, $mailVars, (int) $currency->id, false, $customer->secure_key);
         Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $this->module->currentOrder . '&key=' . $customer->secure_key);
     }
 }

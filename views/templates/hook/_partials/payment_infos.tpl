@@ -19,12 +19,11 @@
 
 
 <dl>
-    <dt>{l s='Amount' d='Modules.Wirepayment.Shop'}</dt>
+    <dt>{l s='Valor' d='Modules.PixPayment.Shop'}</dt>
     <dd>{$total}</dd>
-    <dt>{l s='Name of account owner' d='Modules.Wirepayment.Shop'}</dt>
-    <dd>{$bankwireOwner}</dd>
-    <dt>{l s='Please include these details' d='Modules.Wirepayment.Shop'}</dt>
-    <dd>{$bankwireDetails nofilter}</dd>
-    <dt>{l s='Bank name' d='Modules.Wirepayment.Shop'}</dt>
-    <dd>{$bankwireAddress nofilter}</dd>
+    <dt>{l s='Nome do dono da conta' d='Modules.PixPayment.Shop'}</dt>
+    <dd>{$pixOwner}</dd>
+    <dt>{l s='Chave PIX:' d='Modules.PixPayment.Shop'}</dt>
+    <dd>{$pixKey nofilter}</dd>
+    <dt>{l s='Pix name' d='Modules.PixPayment.Shop'}</dt>
 </dl>

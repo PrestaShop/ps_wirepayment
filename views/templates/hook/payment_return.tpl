@@ -17,17 +17,23 @@
  * International Registered Trademark & Property of PrestaShop SA
  *}
 
-<p>
-  {l s='Your order on %s is complete.' sprintf=[$shop_name] d='Modules.Wirepayment.Shop'}<br/>
-  {l s='Please send us a bank wire with:' d='Modules.Wirepayment.Shop'}
-</p>
-{include file='module:ps_wirepayment/views/templates/hook/_partials/payment_infos.tpl'}
+{if $status == 'ok'}
+    <p>
+      {l s='Seu pedido em %s está completo.' sprintf=[$shop_name] d='Modules.PixPayment.Shop'}<br/>
+      {l s='Por favor, nos envie um PIX de:' d='Modules.PixPayment.Shop'}
+    </p>
+    {include file='module:pixpayment/views/templates/hook/_partials/payment_infos.tpl'}
 
-<p>
-  {l s='Please specify your order reference %s in the bankwire description.' sprintf=[$reference] d='Modules.Wirepayment.Shop'}<br/>
-  {l s='We\'ve also sent you this information by e-mail.' d='Modules.Wirepayment.Shop'}
-</p>
-<strong>{l s='Your order will be sent as soon as we receive payment.' d='Modules.Wirepayment.Shop'}</strong>
-<p>
-  {l s='If you have questions, comments or concerns, please contact our [1]expert customer support team[/1].' d='Modules.Wirepayment.Shop' sprintf=['[1]' => "<a href='{$contact_url}'>", '[/1]' => '</a>']}
-</p>
+    <p>
+      {l s='No campo de mensagem/comentário do PIX, escreva: %s' sprintf=[$reference] d='Modules.PixPayment.Shop'}<br/>
+      {l s='Nós te enviamos essas informações também por e-mail.' d='Modules.PixPayment.Shop'}
+    </p>
+    <strong>{l s='Seu pedido será enviado assim que verificarmos o pagamento' d='Modules.PixPayment.Shop'}</strong>
+    <p>
+      {l s='Se você tem dúvidas, comentários ou sugestões, escreva para nosso [1]suporte[/1].' d='Modules.PixPayment.Shop' sprintf=['[1]' => "<a href='{$contact_url}'>", '[/1]' => '</a>']}
+    </p>
+{else}
+    <p class="warning">
+      {l s='Nós percebemos um problema com seu pedido. Se você acha que isso é um erro, por favor, diga para nosso [1]suporte[/1].' d='Modules.PixPayment.Shop' sprintf=['[1]' => "<a href='{$contact_url}'>", '[/1]' => '</a>']}
+    </p>
+{/if}

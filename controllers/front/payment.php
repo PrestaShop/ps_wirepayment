@@ -21,9 +21,9 @@
 /**
  * @since 1.5.0
  *
- * @property Ps_Wirepayment $module
+ * @property PixPayment $module
  */
-class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
+class PixPaymentPaymentModuleFrontController extends ModuleFrontController
 {
     public $ssl = true;
 
@@ -40,14 +40,14 @@ class Ps_WirepaymentPaymentModuleFrontController extends ModuleFrontController
         }
 
         $total = sprintf(
-            $this->getTranslator()->trans('%1$s (tax incl.)', [], 'Modules.Wirepayment.Shop'),
+            $this->getTranslator()->trans('%1$s)', [], 'Modules.PixPayment.Shop'),
             $this->context->getCurrentLocale()->formatPrice($cart->getOrderTotal(true, Cart::BOTH), $this->context->currency->iso_code)
         );
 
         $this->context->smarty->assign([
             'back_url' => $this->context->link->getPageLink('order', true, null, 'step=3'),
-            'confirm_url' => $this->context->link->getModuleLink('ps_wirepayment', 'validation', [], true),
-            'image_url' => $this->module->getPathUri() . 'ps_wirepayment.jpg',
+            'confirm_url' => $this->context->link->getModuleLink('pixpayment', 'validation', [], true),
+            'image_url' => $this->module->getPathUri() . 'logo.png',
             'cust_currency' => $cart->id_currency,
             'currencies' => $this->module->getCurrency((int) $cart->id_currency),
             'total' => $total,
