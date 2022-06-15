@@ -127,13 +127,31 @@ class Ps_Wirepayment extends PaymentModule
                 Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE)
             );
 
-            $fieldReservationDays = Tools::getValue('BANK_WIRE_RESERVATION_DAYS');
 
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
-                $this->_postErrors[] = $this->trans('Account details are required.', [], 'Modules.Wirepayment.Admin');
-            } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
-                $this->_postErrors[] = $this->trans('Account owner is required.', [], 'Modules.Wirepayment.Admin');
-            } elseif ($fieldReservationDays && !Validate::isUnsignedInt($fieldReservationDays)) {
+                $this->_postErrors[] = $this->trans(
+                    'Account details are required.',
+                    [],
+                    'Modules.Wirepayment.Admin'
+                );
+            }
+            if (!Tools::getValue('BANK_WIRE_OWNER')) {
+                $this->_postErrors[] = $this->trans(
+                    'Account owner is required.',
+                    [],
+                    'Modules.Wirepayment.Admin'
+                );
+            }
+            if (!Tools::getValue('BANK_WIRE_ADDRESS')) {
+                $this->_postErrors[] = $this->trans(
+                    'Account address is required.',
+                    [],
+            'Modules.Wirepayment.Admin'
+                );
+            }
+
+            $fieldReservationDays = Tools::getValue('BANK_WIRE_RESERVATION_DAYS');
+            if ($fieldReservationDays && !Validate::isUnsignedInt($fieldReservationDays)) {
                 $this->_postErrors[] = $this->trans(
                     'The %field% is invalid. Please enter a positive integer.',
                     [
@@ -210,11 +228,10 @@ class Ps_Wirepayment extends PaymentModule
                 ->setCallToActionText($this->trans('Pay by bank wire', [], 'Modules.Wirepayment.Shop'))
                 ->setAction($this->context->link->getModuleLink($this->name, 'validation', [], true))
                 ->setAdditionalInformation($this->fetch('module:ps_wirepayment/views/templates/hook/ps_wirepayment_intro.tpl'));
-        $payment_options = [
+
+        return [
             $newOption,
         ];
-
-        return $payment_options;
     }
 
     public function hookDisplayPaymentReturn($params)
