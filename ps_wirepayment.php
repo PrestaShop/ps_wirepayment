@@ -122,13 +122,23 @@ class Ps_Wirepayment extends PaymentModule
     protected function _postValidation()
     {
         if (Tools::isSubmit('btnSubmit')) {
-            Configuration::updateValue(self::FLAG_DISPLAY_PAYMENT_INVITE,
-                Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE));
+            Configuration::updateValue(
+                self::FLAG_DISPLAY_PAYMENT_INVITE,
+                Tools::getValue(self::FLAG_DISPLAY_PAYMENT_INVITE)
+            );
 
             if (!Tools::getValue('BANK_WIRE_DETAILS')) {
                 $this->_postErrors[] = $this->trans('Account details are required.', [], 'Modules.Wirepayment.Admin');
             } elseif (!Tools::getValue('BANK_WIRE_OWNER')) {
                 $this->_postErrors[] = $this->trans('Account owner is required.', [], 'Modules.Wirepayment.Admin');
+            } elseif (!Validate::isUnsignedInt(Tools::getValue('BANK_WIRE_RESERVATION_DAYS'))) {
+                $this->_postErrors[] = $this->trans(
+                    'The %field% is invalid. Please enter a positive integer.',
+                    [
+                        '%field%' => $this->trans('Reservation period', [], 'Modules.Wirepayment.Admin'),
+                    ],
+                    'Modules.Wirepayment.Admin'
+                );
             }
         }
     }
@@ -147,7 +157,7 @@ class Ps_Wirepayment extends PaymentModule
                     $custom_text[$lang['id_lang']] = Tools::getValue('BANK_WIRE_CUSTOM_TEXT_' . $lang['id_lang']);
                 }
             }
-            Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
+            Configuration::updateValue('BANK_WIRE_RESERVATION_DAYS', (int) Tools::getValue('BANK_WIRE_RESERVATION_DAYS'));
             Configuration::updateValue('BANK_WIRE_CUSTOM_TEXT', $custom_text);
         }
         $this->_html .= $this->displayConfirmation($this->trans('Settings updated', [], 'Admin.Global'));
