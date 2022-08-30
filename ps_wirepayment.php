@@ -144,7 +144,7 @@ class Ps_Wirepayment extends PaymentModule
             }
             if (!Tools::getValue('BANK_WIRE_ADDRESS')) {
                 $this->_postErrors[] = $this->trans(
-                    'Account address is required.',
+                    'Bank address is required.',
                     [],
             'Modules.Wirepayment.Admin'
                 );
