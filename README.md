@@ -4,6 +4,10 @@
 
 Accept wire payments by displaying your account details during the checkout.
 
+## Compatibility
+
+PrestaShop: `1.7.6.0` or later
+
 ## Multistore compatibility
 
 This module is compatible with the multistore :heavy_check_mark: <br/>
