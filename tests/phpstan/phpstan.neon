@@ -4,9 +4,7 @@ includes:
 parameters:
   paths:
     # From PHPStan 0.12, paths to check are relative to the neon file
-    - ../../payment.php
     - ../../ps_wirepayment.php
-    - ../../validation.php
     - ../../controllers/
     - ../../translations/
     - ../../upgrade/
