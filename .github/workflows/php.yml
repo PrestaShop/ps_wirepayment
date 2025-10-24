@@ -47,7 +47,7 @@ jobs:
         with:
           path: ${{ github.event.repository.name }}
       
-      - uses: PrestaShop/.github/.github/actions/php-ci/phpstan@master
+      - uses: Quetzacoalt91/.github/.github/actions/php-ci/phpstan@cache
         with:
           php-version: '7.4'
           presta-version: ${{ matrix.presta-version }}
