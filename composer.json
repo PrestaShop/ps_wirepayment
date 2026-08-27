@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4"
+    "php": ">=7.2.5"
   },
   "require-dev": {
     "prestashop/php-dev-tools": "~3.0"
@@ -27,7 +27,7 @@
     "optimize-autoloader": true,
     "prepend-autoloader": false,
     "platform": {
-      "php": "5.4"
+      "php": "7.2.5"
     }
   },
   "type": "prestashop-module"
