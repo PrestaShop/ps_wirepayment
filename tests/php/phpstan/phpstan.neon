@@ -1,3 +1,2 @@
-parameters:
   # Base PHPStan configuration for the module
   # This file is included by version-specific configs
