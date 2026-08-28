@@ -1,0 +1,8 @@
+includes:
+	- %currentWorkingDirectory%/tests/php/phpstan/phpstan.neon
+
+parameters:
+  # PrestaShop 9 requires PHP 8.1 as a minimum. It has to be set explicitly because PHPStan
+  # otherwise infers the analysed PHP version from composer.json, and the resulting older
+  # syntax rules make it fail to parse the core classes the module inherits from.
+  phpVersion: 80100

@@ -6,7 +6,7 @@ Accept wire payments by displaying your account details during the checkout.
 
 ## Compatibility
 
-PrestaShop: `1.7.6.0` or later
+PrestaShop: `8.2.0` or later
 
 ## Multistore compatibility
 

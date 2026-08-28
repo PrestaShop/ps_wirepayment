@@ -48,8 +48,8 @@ class Ps_Wirepayment extends PaymentModule
     {
         $this->name = 'ps_wirepayment';
         $this->tab = 'payments_gateways';
-        $this->version = '2.2.2';
-        $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
+        $this->version = '3.0.0';
+        $this->ps_versions_compliancy = ['min' => '8.2.0', 'max' => _PS_VERSION_];
         $this->author = 'PrestaShop';
         $this->controllers = ['payment', 'validation'];
         $this->is_eu_compatible = 1;
@@ -401,11 +401,26 @@ class Ps_Wirepayment extends PaymentModule
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->tpl_vars = [
             'fields_value' => $this->getConfigFieldsValues(),
-            'languages' => $this->context->controller->getLanguages(),
+            'languages' => $this->getAdminController()->getLanguages(),
             'id_language' => $this->context->language->id,
         ];
 
         return $helper->generateForm([$fields_form, $fields_form_customization]);
+    }
+
+    /**
+     * Returns the admin controller with a concrete type. Context::$controller is typed
+     * as the PHPStan-opaque LegacyControllerContext on PrestaShop 9.x, which prevents
+     * static resolution of legacy controller methods such as getLanguages().
+     *
+     * @return AdminController
+     */
+    private function getAdminController(): AdminController
+    {
+        /** @var AdminController $controller */
+        $controller = $this->context->controller;
+
+        return $controller;
     }
 
     public function getConfigFieldsValues()
