@@ -401,26 +401,11 @@ class Ps_Wirepayment extends PaymentModule
         $helper->token = Tools::getAdminTokenLite('AdminModules');
         $helper->tpl_vars = [
             'fields_value' => $this->getConfigFieldsValues(),
-            'languages' => $this->getAdminController()->getLanguages(),
+            'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id,
         ];
 
         return $helper->generateForm([$fields_form, $fields_form_customization]);
-    }
-
-    /**
-     * Returns the admin controller with a concrete type. Context::$controller is typed
-     * as the PHPStan-opaque LegacyControllerContext on PrestaShop 9.x, which prevents
-     * static resolution of legacy controller methods such as getLanguages().
-     *
-     * @return AdminController
-     */
-    private function getAdminController(): AdminController
-    {
-        /** @var AdminController $controller */
-        $controller = $this->context->controller;
-
-        return $controller;
     }
 
     public function getConfigFieldsValues()
