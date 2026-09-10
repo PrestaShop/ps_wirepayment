@@ -48,8 +48,8 @@ class Ps_Wirepayment extends PaymentModule
     {
         $this->name = 'ps_wirepayment';
         $this->tab = 'payments_gateways';
-        $this->version = '2.2.1';
-        $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => _PS_VERSION_];
+        $this->version = '3.0.0';
+        $this->ps_versions_compliancy = ['min' => '8.2.0', 'max' => _PS_VERSION_];
         $this->author = 'PrestaShop';
         $this->controllers = ['payment', 'validation'];
         $this->is_eu_compatible = 1;
@@ -101,7 +101,26 @@ class Ps_Wirepayment extends PaymentModule
             return false;
         }
 
+        $this->migrateLegacyOrderStateModuleName();
+
         return true;
+    }
+
+    /**
+     * Shops coming from PrestaShop 1.6 still name this module "bankwire" in the order state row of
+     * "Awaiting bank wire payment". OrderHistory resolves the module from that column to collect
+     * extra_mail_vars, and a name that no longer exists resolves to nothing, so the email goes out
+     * with {bankwire_owner}, {bankwire_details} and {bankwire_address} left as written.
+     *
+     * @return bool
+     */
+    public function migrateLegacyOrderStateModuleName()
+    {
+        return (bool) Db::getInstance()->update(
+            'order_state',
+            ['module_name' => pSQL($this->name)],
+            'module_name = \'bankwire\''
+        );
     }
 
     public function uninstall()

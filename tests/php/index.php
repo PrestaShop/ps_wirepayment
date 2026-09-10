@@ -1,4 +1,5 @@
-{**
+<?php
+/**
  * 2007-2020 PrestaShop and Contributors
  *
  * NOTICE OF LICENSE
@@ -15,11 +16,13 @@
  * @copyright 2007-2020 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of PrestaShop SA
- *}
+ */
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-<div class="alert alert-info">
-  <img src="{$module_dir}logo.png" style="float:left; margin-right:15px;" height="60">
-  <p><strong>{l s="This module allows you to accept secure payments by bank wire." d='Modules.Wirepayment.Admin'}</strong></p>
-  <p>{l s="If the client chooses to pay by bank wire, the order status will change to 'Waiting for Payment'." d='Modules.Wirepayment.Admin'}</p>
-  <p>{l s="That said, you must manually confirm the order upon receiving the bank wire." d='Modules.Wirepayment.Admin'}</p>
-</div>
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+header('Location: ../');
+exit;
